@@ -1,9 +1,9 @@
 -- Import completion API
-local complete = require("complete")
+local completion = require("completion")
 
 -- Generate completion request from prompt, with a risk temperature and maximum token limit
-complete.request("Say this is a test", 0, 7)
+completion.request("Say this is a test", 0, 7)
 
 -- Source locally stored response and print text from first choice
-local last = complete.last()
+local last = completion.last()
 print(last["choices"][1]["text"])
