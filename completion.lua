@@ -6,7 +6,7 @@ local openai = require("../openai-lua/openai")
 
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens)
-    local cmplData = openai.request(prompt, temp, tokens)
+    local cmplData = openai.complete("text-davinci-003", prompt, temp, tokens)
 
     -- Storing response locally for later access --! Overwriting
     local cmplFile = fs.open("/DavinCC/cmpl.json", "w")
