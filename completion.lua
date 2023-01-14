@@ -12,7 +12,7 @@ function completion.request(prompt, temp, tokens)
     -- Unserialise into lua object/table
     local cmplOut = textutils.unserialiseJSON(cmplJSON)
     -- Test choices for contextless summaries
-    for idx, choice in pairs(cmplOut["choices"]) do
+    for _, choice in pairs(cmplOut["choices"]) do
         -- Find openg space to indicate lack of context
         local summStart = string.find(choice["text"], " ")
         if summStart == 1 then
@@ -21,13 +21,18 @@ function completion.request(prompt, temp, tokens)
 
             -- Concatonate prompt as prefix to response and semicolon as suffix to summary
             local summEnd = string.find(choice["text"], "\n") or string.len(choice["text"]) + 1
-            cmplOut["choices"][idx]["text"] = prompt .. quill.insert(choice["text"], ";", summEnd - 1)
+            choice["text"] = prompt .. quill.insert(choice["text"], ";", summEnd - 1)
+        end
+
+        if choice["finish_reason"] == "length" then
+            choice["text"] = quill.toBeContd(choice["text"])
         end
     end
 
+    -- Reserialising for local storage
     cmplJSON = textutils.serialiseJSON(cmplOut)
 
-    -- Storing response locally for later access --! Overwriting
+    -- Storing response locally for later access --! Overwriting each completion
     local cmplFile = fs.open("/DavinCC/cmpl.json", "w")
     cmplFile.write(cmplJSON)
     cmplFile.close()

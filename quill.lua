@@ -11,4 +11,10 @@ function quill.firstUpper(str)
 end
 
 
+function quill.toBeContd(str)
+    str = string.gsub(str, '[ \t]+%f[\r\n%z]', '')
+    return str .. "..."
+end
+
+
 return quill
