@@ -13,15 +13,18 @@ function completion.request(prompt, temp, tokens)
     local cmplOut = textutils.unserialiseJSON(cmplJSON)
     -- Test choices for contextless summaries
     for _, choice in pairs(cmplOut["choices"]) do
-        -- Find openg space to indicate lack of context
+        -- Find opening space to indicate lack of context
         local summStart = string.find(choice["text"], " ")
         if summStart == 1 then
             -- Capitolise first letter of prompt
             prompt = quill.firstUpper(prompt)
 
             -- Concatonate prompt as prefix to response and semicolon as suffix to summary
-            local summEnd = string.find(choice["text"], "\n") or string.len(choice["text"]) + 1
-            choice["text"] = prompt .. quill.insert(choice["text"], ";", summEnd - 1)
+            choice["text"] = prompt .. choice["text"]
+            local summEnd = string.find(choice["text"], "\n") or false
+            if summEnd then
+                choice["text"] = quill.insert(choice["text"], ";", summEnd - 1)
+            end
         end
 
         if choice["finish_reason"] == "length" then

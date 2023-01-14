@@ -11,8 +11,13 @@ function quill.firstUpper(str)
 end
 
 
+function quill.trailSpace(str)
+    return string.gsub(str, '[ \t]+%f[\r\n%z]', '')
+end
+
+
 function quill.toBeContd(str)
-    str = string.gsub(str, '[ \t]+%f[\r\n%z]', '')
+    str = quill.trailSpace(str)
     return str .. "..."
 end
 
