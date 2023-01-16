@@ -37,7 +37,7 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
 
     -- Reserialising for local storage
     cmplJSON = textutils.serialiseJSON(cmplOut)
-    -- Storing response locally for later access --! Overwriting each completion
+    -- Storing response locally for later access
     quill.scribe("/DavinCC/cmpl.json", "w", cmplJSON)
 
     return cmplOut
@@ -56,7 +56,7 @@ end
 
 -- Greet AI and prepare for conversation
 function completion.greet(prompt, temp, tokens)
-    -- Source greeting structure and write into log
+    -- Read greeting structure and write into log
     local greetStart = quill.scribe("/DavinCC/greet.txt", "r") .. " " .. prompt .. "\nAI: "
     local idxStart = string.len(greetStart)
     quill.scribe("/DavinCC/log.txt", "w", greetStart)
@@ -66,37 +66,35 @@ function completion.greet(prompt, temp, tokens)
     local greetReply = completion.request(greetStart, temp, tokens)
     local greetText = greetReply["choices"][1]["text"]
 
-    -- Store in log
-    --! Remove prompt
+    -- Cut history if present and store truncated reply in log
     if string.find(greetText, greetStart) then
         greetReply["choices"][1]["text"] = string.sub(greetText, idxStart + 2)
     end
     local greetScribe = quill.truncateFull(greetReply["choices"][1]["text"])
     quill.scribe("/DavinCC/log.txt", "a", greetScribe)
+
     return greetReply
 end
 
 
 -- Continue with conversation
 function completion.continue(prompt, temp, tokens)
-    local greetStart = quill.scribe("/DavinCC/greet.txt", "r")
-    -- Append user prompt into log
+    -- Append log with user prompt
     prompt = "\nYou: " .. prompt .. "\nAI: "
     quill.scribe("/DavinCC/log.txt", "a", prompt)
 
     -- Adding log history to prompt
     local history = quill.scribe("/DavinCC/log.txt", "r")
     prompt = history .. " " .. prompt
-    
+
     -- Truncate prompt and generate reply
     prompt = quill.truncateSpc(prompt)
     local idxPrompt = string.len(prompt)
     completion.request(prompt, temp, tokens)
     local contReply = completion.last()
     local contText = contReply["choices"][1]["text"]
-    
-    -- Fully truncate reply and append to log
-    --! Remove prompt
+
+    -- Cut history if present and append fully-truncated reply to log
     if string.find(contText, "The following is a conversation") then
         contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
     end

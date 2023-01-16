@@ -13,7 +13,7 @@ print(last .. "\n")
 
 -- Initiate a conversation
 local start = quill.scribe("/DavinCC/greet.txt", "r")
-print(start)
+print(start .. "\n")
 local prompt = read()
 start = quill.truncateSpc(start)
 local greet = completion.greet(prompt, 0, 200)
