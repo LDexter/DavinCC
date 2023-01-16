@@ -79,6 +79,7 @@ end
 
 -- Continue with conversation
 function completion.continue(prompt, temp, tokens)
+    local promptOrigin = string.lower(prompt)
     -- Append log with user prompt
     prompt = "\nYou: " .. prompt .. "\nAI: "
     quill.scribe("/DavinCC/log.txt", "a", prompt)
@@ -100,6 +101,12 @@ function completion.continue(prompt, temp, tokens)
     end
     local contLog = quill.truncateFull(contReply["choices"][1]["text"])
     quill.scribe("/DavinCC/log.txt", "a", contLog)
+
+    -- Clear logs and terminate program if prompted with goodbye keyword
+    if promptOrigin == "goodbye" then
+        quill.scribe("/DavinCC/log.txt", "w", "")
+        os.queueEvent("terminate")
+    end
 
     -- Return original reply
     return contReply
