@@ -17,8 +17,7 @@ print(start)
 local prompt = read()
 start = quill.truncateSpc(start)
 local greet = completion.greet(prompt, 0, 200)
-greet = string.gsub(greet["choices"][1]["text"], start, "")
-print(greet)
+print(greet["choices"][1]["text"])
 
 
 -- Continue the conversation indefinately

@@ -57,18 +57,29 @@ end
 -- Greet AI and prepare for conversation
 function completion.greet(prompt, temp, tokens)
     -- Source greeting structure and write into log
-    local greetData = quill.scribe("/DavinCC/greet.txt", "r") .. " " .. prompt .. "\nAI: "
-    quill.scribe("/DavinCC/log.txt", "w", greetData)
+    local greetStart = quill.scribe("/DavinCC/greet.txt", "r") .. " " .. prompt .. "\nAI: "
+    local idxStart = string.len(greetStart)
+    quill.scribe("/DavinCC/log.txt", "w", greetStart)
 
     -- Truncate newlines of greeting and generate reply
-    greetData = quill.truncateSpc(greetData)
-    local greetReply = completion.request(greetData, temp, tokens)
+    greetStart = quill.truncateSpc(greetStart)
+    local greetReply = completion.request(greetStart, temp, tokens)
+    local greetText = greetReply["choices"][1]["text"]
+
+    -- Store in log
+    --! Remove prompt
+    if string.find(greetText, greetStart) then
+        greetReply["choices"][1]["text"] = string.sub(greetText, idxStart + 2)
+    end
+    local greetScribe = quill.truncateFull(greetReply["choices"][1]["text"])
+    quill.scribe("/DavinCC/log.txt", "a", greetScribe)
     return greetReply
 end
 
 
 -- Continue with conversation
 function completion.continue(prompt, temp, tokens)
+    local greetStart = quill.scribe("/DavinCC/greet.txt", "r")
     -- Append user prompt into log
     prompt = "\nYou: " .. prompt .. "\nAI: "
     quill.scribe("/DavinCC/log.txt", "a", prompt)
@@ -76,15 +87,21 @@ function completion.continue(prompt, temp, tokens)
     -- Adding log history to prompt
     local history = quill.scribe("/DavinCC/log.txt", "r")
     prompt = history .. " " .. prompt
-
+    
     -- Truncate prompt and generate reply
     prompt = quill.truncateSpc(prompt)
+    local idxPrompt = string.len(prompt)
     completion.request(prompt, temp, tokens)
     local contReply = completion.last()
-
+    local contText = contReply["choices"][1]["text"]
+    
     -- Fully truncate reply and append to log
-    local contScribe = quill.truncateFull(contReply["choices"][1]["text"])
-    quill.scribe("/DavinCC/log.txt", "a", contScribe)
+    --! Remove prompt
+    if string.find(contText, "The following is a conversation") then
+        contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
+    end
+    local contLog = quill.truncateFull(contReply["choices"][1]["text"])
+    quill.scribe("/DavinCC/log.txt", "a", contLog)
 
     -- Return original reply
     return contReply
