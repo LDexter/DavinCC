@@ -54,10 +54,11 @@ function completion.last()
 end
 
 
+--! AUTO-ESCAPE QUOTATION MARKS
 -- Greet AI and prepare for conversation
-function completion.greet(prompt, temp, tokens)
+function completion.greet(greetFile, prompt, temp, tokens)
     -- Read greeting structure and write into log
-    local greetStart = quill.scribe("/DavinCC/greet.txt", "r") .. " " .. prompt .. "\nAI: "
+    local greetStart = quill.scribe(greetFile, "r") .. " " .. prompt .. "\nAI: "
     local idxStart = string.len(greetStart)
     quill.scribe("/DavinCC/log.txt", "w", greetStart)
 
@@ -67,7 +68,7 @@ function completion.greet(prompt, temp, tokens)
     local greetText = greetReply["choices"][1]["text"]
 
     -- Cut history if present and store truncated reply in log
-    if string.find(greetText, greetStart) then
+    if string.find(greetText, "The following is a conversation") then
         greetReply["choices"][1]["text"] = string.sub(greetText, idxStart + 2)
     end
     local greetScribe = quill.truncateFull(greetReply["choices"][1]["text"])
@@ -77,6 +78,7 @@ function completion.greet(prompt, temp, tokens)
 end
 
 
+--! AUTO-ESCAPE QUOTATION MARKS
 -- Continue with conversation
 function completion.continue(prompt, temp, tokens)
     local promptOrigin = string.lower(prompt)
@@ -86,7 +88,9 @@ function completion.continue(prompt, temp, tokens)
 
     -- Adding log history to prompt
     local history = quill.scribe("/DavinCC/log.txt", "r")
-    prompt = history .. " " .. prompt
+    history = string.gsub(history, "\"", "\\\"")
+    prompt = history
+    print("\n" .. prompt .. "\n")
 
     -- Truncate prompt and generate reply
     prompt = quill.truncateSpc(prompt)
