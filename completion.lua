@@ -98,7 +98,6 @@ function completion.continue(prompt, temp, tokens, cutoff)
         convo = string.sub(convo, positions[cutoff])
     end
     prompt = greeting .. convo
-    print("\n" .. prompt .. "\n")
 
     -- Truncate prompt and generate reply
     prompt = quill.truncateSpc(prompt)

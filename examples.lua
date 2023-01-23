@@ -30,6 +30,7 @@ local prompt
 while true do
     print("\n")
     prompt = read()
+    -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
     local cont = completion.continue(prompt, risk, 200, 5)
     print(cont["choices"][1]["text"])
 end
