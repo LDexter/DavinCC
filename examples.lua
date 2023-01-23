@@ -5,7 +5,7 @@ local quill = require("quill")
 
 -- Determine risk and personality
 local risk = 1
-local personality = "shy"
+local personality = "standard"
 -- Select greeting file based on personality
 personality = quill.firstUpper(personality)
 local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
@@ -21,21 +21,15 @@ last = last["choices"][1]["text"]
 print(last .. "\n")
 
 
---! AUTO-ESCAPE QUOTATION MARKS
 -- Initiate a conversation
+completion.greet(greetFile)
 local start = quill.scribe(greetFile, "r")
 print(start .. "\n")
-local prompt = read()
-start = quill.truncateSpc(start)
-local greet = completion.greet(greetFile, prompt, risk, 200)
-print(greet["choices"][1]["text"])
-
-
---! AUTO-ESCAPE QUOTATION MARKS
 -- Continue the conversation indefinately
+local prompt
 while true do
     print("\n")
     prompt = read()
-    local cont = completion.continue(prompt, risk, 200)
+    local cont = completion.continue(prompt, risk, 200, 5)
     print(cont["choices"][1]["text"])
 end

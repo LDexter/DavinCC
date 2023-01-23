@@ -4,6 +4,11 @@ local completion = {}
 local openai = require("../openai-lua/openai")
 local quill = require("quill")
 
+-- Enable outter scope for conversation indexing
+local idxPos
+local idxStart
+local positions = {}
+
 
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens) -- TODO: add config class as argument
@@ -54,42 +59,45 @@ function completion.last()
 end
 
 
---! AUTO-ESCAPE QUOTATION MARKS
 -- Greet AI and prepare for conversation
-function completion.greet(greetFile, prompt, temp, tokens)
+function completion.greet(greetFile)
     -- Read greeting structure and write into log
-    local greetStart = quill.scribe(greetFile, "r") .. " " .. prompt .. "\nAI: "
-    local idxStart = string.len(greetStart)
+    local greetStart = quill.scribe(greetFile, "r")
+    idxStart = string.len(greetStart)
     quill.scribe("/DavinCC/log.txt", "w", greetStart)
-
-    -- Truncate newlines of greeting and generate reply
-    greetStart = quill.truncateSpc(greetStart)
-    local greetReply = completion.request(greetStart, temp, tokens)
-    local greetText = greetReply["choices"][1]["text"]
-
-    -- Cut history if present and store truncated reply in log
-    if string.find(greetText, "The following is a conversation") then
-        greetReply["choices"][1]["text"] = string.sub(greetText, idxStart + 2)
-    end
-    local greetScribe = quill.truncateFull(greetReply["choices"][1]["text"])
-    quill.scribe("/DavinCC/log.txt", "a", greetScribe)
-
-    return greetReply
+    idxPos = 1
+    -- print(idxStart)
+    return idxStart
 end
 
 
---! AUTO-ESCAPE QUOTATION MARKS
 -- Continue with conversation
-function completion.continue(prompt, temp, tokens)
-    local promptOrigin = string.lower(prompt)
-    -- Append log with user prompt
+function completion.continue(prompt, temp, tokens, cutoff)
+    local promptLower = string.lower(prompt)
+
+    -- Append prompt to log
     prompt = "\nYou: " .. prompt .. "\nAI: "
     quill.scribe("/DavinCC/log.txt", "a", prompt)
 
-    -- Adding log history to prompt
+    -- Reading and adjusting log
     local history = quill.scribe("/DavinCC/log.txt", "r")
-    history = string.gsub(history, "\"", "\\\"")
-    prompt = history
+    history = string.gsub(history, "\"", "\'")
+
+    -- Recording greeting and convo, as part of log
+    local greeting = string.sub(history, 1, idxStart)
+    local convo = string.sub(history, idxStart + 1)
+
+    -- Current location stored in positions list
+    local idxCurrent = #convo - #prompt
+    positions[idxPos] = idxCurrent
+    idxPos = idxPos + 1
+    cutoff = idxPos - cutoff
+
+    -- If cutoff position exists and cutoff not 0 (infinite), trim conversation
+    if positions[cutoff] and cutoff > 0 then
+        convo = string.sub(convo, positions[cutoff])
+    end
+    prompt = greeting .. convo
     print("\n" .. prompt .. "\n")
 
     -- Truncate prompt and generate reply
@@ -100,14 +108,14 @@ function completion.continue(prompt, temp, tokens)
     local contText = contReply["choices"][1]["text"]
 
     -- Cut history if present and append fully-truncated reply to log
-    if string.find(contText, "The following is a conversation") then
+    if string.find(contText, "The following is a conversation") then    -- TODO: add flexible matching
         contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
     end
     local contLog = quill.truncateFull(contReply["choices"][1]["text"])
     quill.scribe("/DavinCC/log.txt", "a", contLog)
 
     -- Clear logs and terminate program if prompted with goodbye keyword
-    if promptOrigin == "goodbye" then
+    if promptLower == "goodbye" then
         quill.scribe("/DavinCC/log.txt", "w", "")
         os.queueEvent("terminate")
     end
