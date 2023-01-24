@@ -1,0 +1,3 @@
+[submodule "lib/openai-lua"]
+	path = lib/openai-lua
+	url = https://github.com/LDexter/openai-lua.git
