@@ -1,7 +1,7 @@
 local completion = {}
 
 -- Import openai API
-local openai = require("../openai-lua/openai")
+local openai = require("lib/openai-lua/openai")
 local quill = require("quill")
 
 -- Enable outter scope for conversation indexing
