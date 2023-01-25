@@ -43,7 +43,6 @@ Conversations require a greetName.txt file with a custom personality description
   - Will develop care for things that you make apparent as concerns
   - Even evolves based on its own replies, through habitual growth
   - You are capable of swaying its habits (if you're convincing enough!)
-  -
 
 ---
 
