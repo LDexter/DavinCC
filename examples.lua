@@ -1,4 +1,5 @@
--- Import completion API
+-- Import completion and quill
+package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("completion")
 local quill = require("quill")
 

@@ -1,21 +1,29 @@
--- Import completion API
+-- Import completion and quill
+package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("completion")
 local quill = require("quill")
 
-
 -- User input for risk and personality
-local personality, risk = ...
+local personality, risk, cutoff = ...
 personality = personality or "standard"
 
 -- Input testing for non-number
 if type(risk) ~= "number" then
     risk = 0
 end
+if type(cutoff) ~= "number" then
+    cutoff = 5
+end
 -- Input testing for out of range
 if risk < 0 then
     risk = 0
 elseif risk > 1 then
     risk = 1
+end
+if cutoff < 0 then
+    cutoff = 0
+elseif cutoff > 100 then
+    cutoff = 100
 end
 
 

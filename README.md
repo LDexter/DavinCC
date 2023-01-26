@@ -73,13 +73,13 @@ Conversations require a greetName.txt file with a custom personality description
 
 ## Setup Guide
 
-1. Download zip under "< > Code" dropdown and place extracted folder in computer directory
+1. Download zip under "< > Code" dropdown and place extracted folder in CC **_root directory_**
 2. Follow steps for API setup at my [openai-lua repository](https://github.com/LDexter/openai-lua)
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
 5. Run `examples.lua` for a full demo or `da.lua` for conversation interface and enjoy!
 
-Current state of `da.lua` enables you to run with `da [personality] [risk]`, with both parameters being optional, defaulting to "standard" personality and 0 risk.
+Current state of `da.lua` enables you to run with `da [personality] [risk] [cutoff]`, with all parameters being optional, defaulting to "standard" personality, 0 risk, and 5 cutoff. Cutoff sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt.
 
 ## Custom Personalities Through Greeting Files
 
