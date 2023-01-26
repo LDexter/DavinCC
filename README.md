@@ -26,7 +26,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Conversations that carry into **infinity -** **_and beyond_**
+- [x] Conversations that carry into **infinity -** **_and beyond_** <span>&nbsp;</span> <img width="20px" src="https://github.com/LDexter/fontawesome-pro/blob/main/planet-ringed-duotone.svg">
 
   - Optional reply capping that allows old inputs to expire, releaving the AI from having to process an increasingly bloated chatlog (where context is stored)
   - This ability to "forget" means you can cheat the OpenAI prompting limits with a conversation that evolves over the span of a week... _or a couple millennia_
