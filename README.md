@@ -88,3 +88,7 @@ Remember two things about greeting files:
 
 - Quality _and_ quantity are paramount for effective results
 - `"The following is a conversation"` and `"You:"`/`"AI:"` are off-limits from being edited, else the program will break. That being said, these are planned to be cofigurable.
+
+<dl>
+  <i class="fa-regular fa-rocket-launch"></i>
+</dl>
