@@ -14,7 +14,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 ## Greater Control Than ChatGPT?
 
-###### Reasons why I feel this offers improvements over OpenAI's latest product
+###### Reasons why I feel DavinCC offers improvements over OpenAI's latest product
 
 ---
 
