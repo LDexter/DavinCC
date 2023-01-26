@@ -22,8 +22,8 @@ elseif risk > 1 then
 end
 if cutoff < 0 then
     cutoff = 0
-elseif cutoff > 100 then
-    cutoff = 100
+elseif cutoff > 42 then
+    cutoff = 42
 end
 
 

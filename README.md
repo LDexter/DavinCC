@@ -74,7 +74,10 @@ Conversations require a greetName.txt file with a custom personality description
 ## Setup Guide
 
 1. Download zip under "< > Code" dropdown and place extracted folder in CC **_root directory_**
-2. Follow steps for API setup at my [openai-lua repository](https://github.com/LDexter/openai-lua)
+2. Follow these steps for API setup from my [openai-lua repository](https://github.com/LDexter/openai-lua#api-setup)
+   1. Sign-in and access your [private API key](https://beta.openai.com/account/api-keys)
+   2. Paste the API key into `template.env`, replacing the sample key
+   3. Rename template.env to just .env
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
 5. Run `examples.lua` for a full demo or `da.lua` for conversation interface and enjoy!
