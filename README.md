@@ -88,5 +88,3 @@ Remember two things about greeting files:
 
 - Quality _and_ quantity are paramount for effective results
 - `"The following is a conversation"` and `"You:"`/`"AI:"` are off-limits from being edited, else the program will break. That being said, these are planned to be cofigurable.
-
-<img src="https://github.com/LDexter/fontawesome-pro/blob/main/planet-ringed-duotone.svg">
