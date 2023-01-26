@@ -3,16 +3,18 @@ package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("completion")
 local quill = require("quill")
 
-
--- Determine personality and risk
+-- Conversation arguments
 local personality = "standard"
 local risk = 1
+local tokens = 200
+local cutoff = 5
+
 -- Select greeting file based on personality
 personality = quill.firstUpper(personality)
 local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
 
 
--- Generate completion request from prompt, with a risk temperature and maximum token limit
+-- Generate test completion, with a risk temperature and maximum token limit
 completion.request("Say this is a test", 0, 10)
 
 
@@ -35,6 +37,6 @@ while true do
     print("\n")
     prompt = read()
     -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-    cont = completion.continue(prompt, risk, 200, 5)
+    cont = completion.continue(prompt, risk, tokens, cutoff)
     print(cont["choices"][1]["text"])
 end

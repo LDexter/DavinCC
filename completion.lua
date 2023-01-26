@@ -1,6 +1,7 @@
 local completion = {}
 
--- Import openai API
+-- Import openai and quill
+package.path = "/DavinCC/?.lua;" .. package.path
 local openai = require("lib/openai-lua/openai")
 local quill = require("quill")
 
