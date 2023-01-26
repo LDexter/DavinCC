@@ -18,7 +18,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Risk-taking factor
+- [x] Risk-taking factor <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/dice.svg">
   - ChatGPT is famously certain on every single reply, with zero risk
   - Davinci however, has a temperature floating point (0-1) for taking risks
   - Risk-taking produces the most unique and interesting replies
@@ -26,14 +26,14 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Conversations that carry into **infinity -** **_and beyond_** <span>&nbsp;</span> <img width="20px" src="https://github.com/LDexter/fontawesome-pro/blob/main/planet-ringed-duotone.svg">
+- [x] Conversations that carry into **infinity -** **_and beyond_** <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/planet-ringed.svg">
 
   - Optional reply capping that allows old inputs to expire, releaving the AI from having to process an increasingly bloated chatlog (where context is stored)
   - This ability to "forget" means you can cheat the OpenAI prompting limits with a conversation that evolves over the span of a week... _or a couple millennia_
 
 ---
 
-- [x] Access to what I call "personality injection" (which they simply call prompt structuring)
+- [x] Access to what I call "personality injection" (which they simply call prompt structuring) <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/syringe.svg">
 
   - Quick and easy behavioural customisation without data training
   - Fully embraces whatever personality you describe
@@ -41,7 +41,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Far less filtering **and way more emotional** _(results depend on your greeting file)_
+- [x] Far less filtering **and way more emotional** _(results depend on your greeting file)_ <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/face-holding-back-tears.svg">
 
   - An AI with feelings, emotions, concerns, etc
   - Emotionally opens up about itself and get incredibly personal
@@ -52,17 +52,17 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Freedom to train on your own data
+- [x] Freedom to train on your own data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
   - Notice knowledge gaps? Train them into Davinci: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
 
 ---
 
-- [x] Faster and more reliable, with "ChatGPT Pro" now taking priority over free users
+- [x] Faster and more reliable, with "ChatGPT Pro" now taking priority over free users <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/rabbit-running.svg">
   - Also at a **_zero-cost price point_**, as this relies upon tokens that are provided in ample supply by OpenAI for free - no card required
 
 ---
 
-- [x] Oh yeah, and it just happens to run in Minecraft through [CC:Tweaked](https://tweaked.cc/)
+- [x] Oh yeah, and it just happens to run in Minecraft through [CC:Tweaked](https://tweaked.cc/) <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/cube.svg">
   - Because reasons
 
 ---
