@@ -19,6 +19,7 @@ Conversations require a greetName.txt file with a custom personality description
 ---
 
 - [x] Risk-taking factor <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/dice.svg">
+
   - ChatGPT is famously certain on every single reply, with zero risk
   - Davinci however, has a temperature floating point (0-1) for taking risks
   - Risk-taking produces the most unique and interesting replies
@@ -53,16 +54,19 @@ Conversations require a greetName.txt file with a custom personality description
 ---
 
 - [x] Freedom to train on your own data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
+
   - Notice knowledge gaps? Train them into Davinci: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
 
 ---
 
 - [x] Faster and more reliable, with "ChatGPT Pro" now taking priority over free users <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/rabbit-running.svg">
+
   - Also at a **_zero-cost price point_**, as this relies upon tokens that are provided in ample supply by OpenAI for free - no card required
 
 ---
 
 - [x] Oh yeah, and it just happens to run in Minecraft through [CC:Tweaked](https://tweaked.cc/) <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/cube.svg">
+
   - Because reasons
 
 ---
