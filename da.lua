@@ -34,7 +34,7 @@ local cont
 
 -- Quick and flavourless request
 if personality == "none" then
-    print("Personality: \"" .. personality .. "\"\n")
+    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. "\n")
     prompt = read()
     -- Complete prompt (user input), risk (0-1), token limit
     cont = completion.request(prompt, risk, 200)
