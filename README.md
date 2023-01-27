@@ -10,7 +10,7 @@ This program generates text in the Minecraft mod [CC:Tweaked](https://tweaked.cc
 
 DavinCC provides isolated prompting for generic replies and automated structuring for a conversational experience akin to [ChatGPT](https://chat.openai.com/chat), yet is fully customisable.
 
-Conversations require a greetName.txt file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies. **_(Greeting files and conversations detailed at end)_**
+Conversations require a greetName.txt file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies **_(Greeting files and conversations detailed at end)_**.
 
 ## Greater Control Than ChatGPT?
 
@@ -80,9 +80,9 @@ Conversations require a greetName.txt file with a custom personality description
    3. Rename template.env to just .env
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
-5. Run `examples.lua` for a full demo or `da.lua` for conversation interface and enjoy!
+5. Run `da [personality] [risk] [cutoff]` for a conversation interface and enjoy!
 
-Current state of `da.lua` enables you to run with `da [personality] [risk] [cutoff]`, with all parameters being optional, defaulting to "standard" personality, 0 risk, and 5 cutoff. Cutoff sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt.
+Current state of `da.lua` enables you to run `da [personality] [risk] [cutoff]`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, and 5 cutoff. Risk range is a 0-1 floating point number (0.1, 0.2, 0.3, etc). Cutoff sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. `examples.lua` is also available as a less UX-focused demo.
 
 ## Custom Personalities Through Greeting Files
 
