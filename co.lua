@@ -33,6 +33,6 @@ local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
 prompt = quill.scribe(greetFile, "r")
 prompt = quill.truncateSpc(prompt)
 -- Continue with prompt (file input), risk (0-1), token limit
-cont = completion.request(prompt, risk, 200)
+cont = completion.request(prompt, risk, 1000)
 quill.scribe("/DavinCC/out.txt", "w", cont["choices"][1]["text"])
 print(cont["choices"][1]["text"])
