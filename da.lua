@@ -6,6 +6,7 @@ local quill = require("quill")
 -- User input for risk and personality
 local personality, risk, cutoff = ...
 personality = personality or "standard"
+risk = tonumber(risk)
 
 -- Input testing for non-number
 if type(risk) ~= "number" then
@@ -25,6 +26,10 @@ if cutoff < 0 then
 elseif cutoff > 42 then
     cutoff = 42
 end
+
+
+-- Printing chosen arguments
+print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff)
 
 
 -- Select greeting file based on personality
