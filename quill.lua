@@ -33,13 +33,13 @@ function quill.trailSpace(str)
 end
 
 
--- Truncate into spaces
+-- Truncate newlines into spaces
 function quill.truncateSpc(str)
     return string.gsub(str, "\n", " ")
 end
 
 
--- Truncate fully
+-- Truncate newlines fully
 function quill.truncateFull(str)
     return string.gsub(str, "\n", "")
 end

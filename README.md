@@ -83,7 +83,7 @@ Conversations require a greetName.txt file with a custom personality description
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
 5. Run `da [personality] [risk] [cutoff]` for a conversation interface and enjoy!
 
-Current state of `da.lua` enables you to run `da [personality] [risk] [cutoff]`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, and 5 cutoff. Risk range is a 0-1 floating point number (0.1, 0.2, 0.3, etc). Cutoff sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. `examples.lua` is also available as a less UX-focused demo.
+Current state of `da.lua` enables you to run `da [personality] [risk] [cutoff]`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, and 5 cutoff. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. `examples.lua` is also available as a less UX-focused demo.
 
 ## Custom Personalities Through Greeting Files
 

@@ -1,0 +1,13 @@
+
+You: Job description
+Our client, Infinite Networks Pty Ltd, is looking for an experienced Web Developer. Infinite Networks is in the business of Telecommunications and IT and offers a broad range of solutions including web development, application development, hosting, and networking. It is looking to fill a position for Web Developer, the details of which are as below:
+Salary: AUD 99,000 plus Super
+Position: Full-time
+Location: Mawson Drive, Mawson ACT 2607
+Experience: Min. post-qualification experience of 2 years
+Responsibilities 1. Designing and developing imaging, presentations, and Internet applications using multimedia software, tools and utilities, interactive graphics, and programming languages 2. Building functionality, interactivity, and visible structure of websites 3. Planning, producing, and maintaining websites using web programming languages, software applications, technologies, and user-need specifications 4. Communicating with network specialists regarding web-related issues, 5. Working on security and hosting websites, 6. Analysing, designing, and developing Internet sites 7. Controlling and enforcing Internet and web server security, user access, website backup and disaster recovery planning 8. Designing, developing, and integrating computer code and Internet strategies
+Qualifications/Education: Relevant bachelor?s degree or higher qualification plus at least 2 years of experience
+Technologies: PhP, JavaScript, Node.js, HTML, WordPress, Express.js and Drupal
+Attributes: Previous experience working in a professional setup. Excellent communication (written and oral) and team-work skills. Experience interacting with APIs. An interest in learning and introducing new technologies to the business.
+I am the right candidate for this role, because
+AI: 
