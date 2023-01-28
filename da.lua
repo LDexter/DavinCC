@@ -58,17 +58,23 @@ else
 
 
     -- Start with reply to "hello" prompt
+    term.setTextColour(colours.orange)
     cont = completion.continue("hello", risk, 200, cutoff)
     print(cont["choices"][1]["text"])
 
 
     -- Continue the conversation indefinately
     while true do
+        -- Read input
         print("\n")
+        term.setTextColour(colours.red)
         prompt = read()
         print("\n")
+
         -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
         cont = completion.continue(prompt, risk, 200, cutoff)
+
+        term.setTextColour(colours.orange)
         print(cont["choices"][1]["text"])
     end
 end
