@@ -2,6 +2,7 @@
 package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("completion")
 local quill = require("quill")
+local openai = require("lib/openai-lua/openai")
 
 -- Conversation arguments
 local personality = "standard"
