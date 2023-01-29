@@ -114,8 +114,8 @@ function completion.continue(prompt, temp, tokens, cutoff)
     local contLog = quill.truncateFull(contReply["choices"][1]["text"])
     quill.scribe("/DavinCC/log.txt", "a", contLog)
 
-    -- Clear logs and terminate program if prompted with goodbye keyword
-    if promptLower == "goodbye" then
+    -- Clear logs and terminate program if prompted with goodbye/bye keywords
+    if promptLower == "goodbye" or promptLower == "bye" then
         quill.scribe("/DavinCC/log.txt", "w", "")
         os.queueEvent("terminate")
     end
