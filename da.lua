@@ -2,12 +2,15 @@
 package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("completion")
 local quill = require("quill")
+local sketch = require("sketch")
 
 -- User input for risk and personality
-local personality, risk, cutoff = ...
+local personality, risk, cutoff, img = ...
+local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
 risk = tonumber(risk)
+img = string.lower(img)
 
 -- Input testing for non-number
 if type(risk) ~= "number" then
@@ -27,45 +30,59 @@ if cutoff < 0 then
 elseif cutoff > 42 then
     cutoff = 42
 end
+-- Translating string to boolean
+if img == "true" or img == "t" or img == 1 then
+    img = "true"
+    isImg = true
+elseif img == "false" or img == "f" or img == 0 then
+    img = "false"
+    isImg = false
+end
 
 local prompt
 local cont
+local reply
+local number = 1
+local size = "256x256"
 
 
 -- Quick and flavourless request
 if personality == "none" then
+    -- Print arguments
     print("Personality: \"" .. personality .. "\" Risk: " .. risk .. "\n")
+
+    -- Read input as orange
+    term.setTextColour(colours.orange)
     prompt = read()
+
     -- Complete prompt (user input), risk (0-1), token limit
     cont = completion.request(prompt, risk, 200)
+
+    term.setTextColour(colours.red)
     print(cont["choices"][1]["text"] .. "\n")
 
 
 -- Otherwise, conduct conversation with chosen personality
 else
     -- Printing chosen arguments
-    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff)
-
+    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img)
 
     -- Select greeting file based on personality
     personality = quill.firstUpper(personality)
     local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
 
-
     -- Initiate a conversation
     completion.greet(greetFile)
     quill.scribe(greetFile, "r")
-
 
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
     cont = completion.continue("hello", risk, 200, cutoff)
     print(cont["choices"][1]["text"])
 
-
     -- Continue the conversation indefinately
     while true do
-        -- Read input
+        -- Read input as red
         print("\n")
         term.setTextColour(colours.red)
         prompt = read()
@@ -74,7 +91,20 @@ else
         -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
         cont = completion.continue(prompt, risk, 200, cutoff)
 
+        -- Store truncated reply
+        reply = cont["choices"][1]["text"]
+        reply = quill.truncateFull(reply)
+        quill.scribe("/DavinCC/out.txt", "w", reply)
+
+        -- Print as orange
         term.setTextColour(colours.orange)
-        print(cont["choices"][1]["text"])
+        print(reply)
+
+        -- Generating image if flag called
+        if isImg then
+            sleep(1)
+            sketch.generate(reply, number, size)
+            print("I made an image...\n")
+        end
     end
 end

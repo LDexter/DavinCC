@@ -81,11 +81,11 @@ Conversations require a greetName.txt file with a custom personality description
    3. Rename template.env to just .env
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
-5. Run `da [personality] [risk] [cutoff]` for a conversation interface and enjoy!
+5. Run `da [personality] [risk] [cutoff] [img]` for a conversation interface and enjoy!
 
 ## The Programs
 
-`da.lua` enables you to run `da [personality] [risk] [cutoff]`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, and 5 cutoff. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens.
+`da.lua` enables you to run `da [personality] [risk] [cutoff]`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, and 5 cutoff. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. **_Img_**, if true, tells DavinCC to generate images using [DALL-CC](https://github.com/LDexter/DALL-CC) throughout a conversation, provided the [DALL-CC](https://github.com/LDexter/DALL-CC) library is located at root.
 
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
 
