@@ -14,6 +14,8 @@ if risk then
 end
 if img then
     img = string.lower(img)
+else
+    img = "false"
 end
 
 -- Input testing for non-number
