@@ -9,8 +9,12 @@ local personality, risk, cutoff, img = ...
 local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
-risk = tonumber(risk)
-img = string.lower(img)
+if risk then
+    risk = tonumber(risk)
+end
+if img then
+    img = string.lower(img)
+end
 
 -- Input testing for non-number
 if type(risk) ~= "number" then
