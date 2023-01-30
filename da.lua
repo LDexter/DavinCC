@@ -19,6 +19,9 @@ if img then
 else
     img = "false"
 end
+if magnitude then
+    magnitude = string.lower(magnitude)
+end
 -- Magnitude conversion, defaults to large
 local size
 if magnitude == "sm" then
