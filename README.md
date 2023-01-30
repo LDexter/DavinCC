@@ -54,6 +54,14 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
+- [x] Conversational image generation <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/image.svg">
+  - Automatic piping of generated text into DALL-CC for effortless image prompting
+  - The perfect combination of one word in, extreme detail out, to prompt an image
+  - If you are at a complete loss for any ideas, just ask DavinCC to imagine its own!
+  - Thanks to seamless integration, images are influenced by all the above features!
+
+---
+
 - [x] Freedom to train on your own data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
 
   - Notice knowledge gaps? Train them into Davinci: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
