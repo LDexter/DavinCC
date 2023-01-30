@@ -5,10 +5,12 @@ local quill = require("quill")
 local sketch = require("sketch")
 
 -- User input for risk and personality
-local personality, risk, cutoff, img = ...
+local personality, risk, cutoff, img, magnitude = ...
 local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
+
+-- Input conversion
 if risk then
     risk = tonumber(risk)
 end
@@ -16,6 +18,17 @@ if img then
     img = string.lower(img)
 else
     img = "false"
+end
+-- Magnitude conversion, defaults to large
+local size
+if magnitude == "sm" then
+    size = "256x256"
+elseif magnitude == "md" then
+    size = "512x512"
+elseif magnitude == "lg" then
+    size = "1024x1024"
+else
+    size = "1024x1024"
 end
 
 -- Input testing for non-number
@@ -45,11 +58,11 @@ elseif img == "false" or img == "f" or img == 0 then
     isImg = false
 end
 
+-- Conversation variables
 local prompt
 local cont
 local reply
 local number = 1
-local size = "256x256"
 
 
 -- Quick and flavourless request
