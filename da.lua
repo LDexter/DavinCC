@@ -21,8 +21,10 @@ else
 end
 if magnitude then
     magnitude = string.lower(magnitude)
+else
+    magnitude = "sm"
 end
--- Magnitude conversion, defaults to large
+-- Magnitude conversion, defaults to small
 local size
 if magnitude == "sm" then
     size = "256x256"
@@ -30,8 +32,6 @@ elseif magnitude == "md" then
     size = "512x512"
 elseif magnitude == "lg" then
     size = "1024x1024"
-else
-    size = "256x256"
 end
 
 -- Input testing for non-number
