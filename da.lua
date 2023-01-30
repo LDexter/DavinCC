@@ -71,17 +71,31 @@ local number = 1
 -- Quick and flavourless request
 if personality == "none" then
     -- Print arguments
-    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. "\n")
+    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Img: " .. img .. "\n")
 
     -- Read input as orange
     term.setTextColour(colours.orange)
     prompt = read()
+    print("\n")
 
     -- Complete prompt (user input), risk (0-1), token limit
     cont = completion.request(prompt, risk, 200)
 
+    -- Store truncated reply
+    reply = cont["choices"][1]["text"]
+    reply = quill.truncateFull(reply)
+    quill.scribe("/DavinCC/out.txt", "w", reply)
+
+    -- Print as orange
     term.setTextColour(colours.red)
-    print(cont["choices"][1]["text"] .. "\n")
+    print(reply .. "\n")
+
+    -- Generating image if true
+    if isImg then
+        sleep(1)
+        sketch.generate(reply, number, size)
+        print("I made an image...\n")
+    end
 
 
 -- Otherwise, conduct conversation with chosen personality
@@ -122,7 +136,7 @@ else
         term.setTextColour(colours.orange)
         print(reply)
 
-        -- Generating image if flag called
+        -- Generating image if true
         if isImg then
             sleep(1)
             sketch.generate(reply, number, size)
