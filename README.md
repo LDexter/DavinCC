@@ -92,6 +92,7 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 ### DALL-vinci Output Sample
 
 ![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
+
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
 
 `examples.lua` is also available as a less UX-focused demo.
