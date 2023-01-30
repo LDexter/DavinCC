@@ -28,7 +28,7 @@ elseif magnitude == "md" then
 elseif magnitude == "lg" then
     size = "1024x1024"
 else
-    size = "1024x1024"
+    size = "256x256"
 end
 
 -- Input testing for non-number
