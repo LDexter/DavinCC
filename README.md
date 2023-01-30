@@ -89,8 +89,9 @@ Conversations require a greetName.txt file with a custom personality description
 
 Producing AI-generated images, that are prompted by AI-generated text requires as little effort as: _"Imagine a photograph/artwork/cartoon of a girraffe. Describe."_ The value achieved here is immese, as your input consists of one word: "girrafe", while DavinCC's output is a verbose breakdown of your girraffe in great detail... and DALL-CC **_loves detail_**. An example output from this incredible AI tag-team effort is below.
 
-![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
+### DALL-vinci Output Sample
 
+![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
 
 `examples.lua` is also available as a less UX-focused demo.
