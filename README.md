@@ -89,7 +89,7 @@ Conversations require a greetName.txt file with a custom personality description
    3. Rename template.env to just .env
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
-5. Run `da [personality] [risk] [cutoff] [img] [magnitude](sm, md, lg)` for a conversation interface and enjoy!
+5. Run `da` for a conversation interface and enjoy!
 
 ## The Programs
 
