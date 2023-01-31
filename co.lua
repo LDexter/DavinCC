@@ -49,6 +49,6 @@ reply = string.sub(cont["choices"][1]["text"], idxPrompt)
 quill.scribe("/DavinCC/out.txt", "w", reply)
 
 
--- Print as orange
+-- Print output as orange
 term.setTextColour(colours.orange)
 print(reply .. "\n")

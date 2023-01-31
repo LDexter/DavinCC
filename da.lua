@@ -73,8 +73,8 @@ if personality == "none" then
     -- Print arguments
     print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Img: " .. img .. "\n")
 
-    -- Read input as orange
-    term.setTextColour(colours.orange)
+    -- Read input as red
+    term.setTextColour(colours.red)
     prompt = read()
     print("\n")
 
@@ -86,8 +86,8 @@ if personality == "none" then
     reply = quill.truncateFull(reply)
     quill.scribe("/DavinCC/out.txt", "w", reply)
 
-    -- Print as orange
-    term.setTextColour(colours.red)
+    -- Print output as orange
+    term.setTextColour(colours.orange)
     print(reply .. "\n")
 
     -- Generating image if true
@@ -132,7 +132,7 @@ else
         reply = quill.truncateFull(reply)
         quill.scribe("/DavinCC/out.txt", "w", reply)
 
-        -- Print as orange
+        -- Print output as orange
         term.setTextColour(colours.orange)
         print(reply)
 
