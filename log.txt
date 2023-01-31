@@ -1,0 +1,8 @@
+The following is a conversation with an AI assistant.
+The assistant is helpful, creative, clever, and very friendly.
+You: Hello, who are you?
+AI: I am an AI created by OpenAI. How can I help you today?
+You: hello
+AI: Hello there! How can I help you today?
+You: are owls birds
+AI: Yes, owls are birds. They belong to the order Strigiformes, which includes over 200 species of mostly solitary and nocturnal birds of prey.
