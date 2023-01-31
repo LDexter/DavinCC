@@ -50,5 +50,5 @@ quill.scribe("/DavinCC/out.txt", "w", reply)
 
 
 -- Print as orange
-term.setTextColour(colours.red)
+term.setTextColour(colours.orange)
 print(reply .. "\n")
