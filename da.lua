@@ -24,6 +24,7 @@ if magnitude then
 else
     magnitude = "sm"
 end
+
 -- Magnitude conversion, defaults to small
 local size
 if magnitude == "sm" then
@@ -41,6 +42,7 @@ end
 if type(cutoff) ~= "number" then
     cutoff = 5
 end
+
 -- Input testing for out of range
 if risk < 0 then
     risk = 0
@@ -52,6 +54,7 @@ if cutoff < 0 then
 elseif cutoff > 42 then
     cutoff = 42
 end
+
 -- Translating string to boolean
 if img == "true" or img == "t" or img == 1 then
     img = "true"
