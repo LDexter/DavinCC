@@ -20,19 +20,35 @@ elseif risk > 1 then
     risk = 1
 end
 
-
-local prompt
+-- Continuation variables
+local greetFile
 local cont
+local prompt
+local idxPrompt
+local reply
 
 
-print("Personality: \"" .. personality .. "\"\n")
+-- Print arguments
+print("Personality: \"" .. personality .. "\" Risk: " .. risk ..  "\n")
 
+
+-- Pathing to greeting file
 personality = quill.firstUpper(personality)
-local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
+greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
 
+
+-- Read and truncate greeting into prompt
 prompt = quill.scribe(greetFile, "r")
 prompt = quill.truncateSpc(prompt)
+idxPrompt = #prompt + 2
+
+
 -- Continue with prompt (file input), risk (0-1), token limit
 cont = completion.request(prompt, risk, 1000)
-quill.scribe("/DavinCC/out.txt", "w", cont["choices"][1]["text"])
-print(cont["choices"][1]["text"])
+reply = string.sub(cont["choices"][1]["text"], idxPrompt)
+quill.scribe("/DavinCC/out.txt", "w", reply)
+
+
+-- Print as orange
+term.setTextColour(colours.red)
+print(reply .. "\n")
