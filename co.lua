@@ -39,7 +39,7 @@ greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
 
 -- Read and truncate greeting into prompt
 prompt = quill.scribe(greetFile, "r")
-prompt = quill.truncateSpc(prompt)
+prompt = quill.truncate(prompt)
 idxPrompt = #prompt + 2
 
 

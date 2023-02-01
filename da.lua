@@ -82,11 +82,11 @@ if personality == "none" then
     print("\n")
 
     -- Complete prompt (user input), risk (0-1), token limit
-    cont = completion.request(prompt, risk, 200)
+    cont = completion.request(prompt, risk, 1000)
 
     -- Store truncated reply
     reply = cont["choices"][1]["text"]
-    reply = quill.truncateFull(reply)
+    reply = quill.truncate(reply)
     quill.scribe("/DavinCC/out.txt", "w", reply)
 
     -- Print output as orange
@@ -132,7 +132,7 @@ else
 
         -- Store truncated reply
         reply = cont["choices"][1]["text"]
-        reply = quill.truncateFull(reply)
+        reply = quill.truncate(reply)
         quill.scribe("/DavinCC/out.txt", "w", reply)
 
         -- Print output as orange

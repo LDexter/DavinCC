@@ -101,7 +101,7 @@ function completion.continue(prompt, temp, tokens, cutoff)
     prompt = greeting .. convo
 
     -- Truncate prompt and generate reply
-    prompt = quill.truncateSpc(prompt)
+    prompt = quill.truncate(prompt)
     local idxPrompt = string.len(prompt)
     completion.request(prompt, temp, tokens)
     local contReply = completion.last()
@@ -111,7 +111,7 @@ function completion.continue(prompt, temp, tokens, cutoff)
     if string.find(contText, "The following is a conversation") then    -- TODO: add flexible matching
         contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
     end
-    local contLog = quill.truncateFull(contReply["choices"][1]["text"])
+    local contLog = quill.truncate(contReply["choices"][1]["text"])
     quill.scribe("/DavinCC/log.txt", "a", contLog)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
