@@ -1,8 +1,8 @@
 -- Import completion and quill
 package.path = "/DavinCC/?.lua;" .. package.path
-local completion = require("completion")
-local quill = require("quill")
-local sketch = require("sketch")
+local completion = require("lib/completion")
+local quill = require("lib/quill")
+local sketch = require("lib/sketch")
 
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
@@ -134,7 +134,7 @@ else
         -- Store truncated reply
         reply = cont["choices"][1]["text"]
         reply = quill.truncate(reply)
-        quill.scribe("/DavinCC/out.txt", "w", reply)
+        quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
         -- Print output as orange
         term.setTextColour(colours.orange)

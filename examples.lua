@@ -1,8 +1,7 @@
 -- Import completion and quill
 package.path = "/DavinCC/?.lua;" .. package.path
-local completion = require("completion")
-local quill = require("quill")
-local openai = require("lib/openai-lua/openai")
+local completion = require("lib/completion")
+local quill = require("lib/quill")
 
 -- Conversation arguments
 local personality = "standard"

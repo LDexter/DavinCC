@@ -1,7 +1,7 @@
 -- Import completion and quill
 package.path = "/DavinCC/?.lua;" .. package.path
-local completion = require("completion")
-local quill = require("quill")
+local completion = require("lib/completion")
+local quill = require("lib/quill")
 
 -- User input for risk and personality
 local personality, risk = ...
@@ -46,7 +46,7 @@ idxPrompt = #prompt + 2
 -- Continue with prompt (file input), risk (0-1), token limit
 cont = completion.request(prompt, risk, 1000)
 reply = string.sub(cont["choices"][1]["text"], idxPrompt)
-quill.scribe("/DavinCC/out.txt", "w", reply)
+quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
 
 -- Print output as orange

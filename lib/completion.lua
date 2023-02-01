@@ -3,7 +3,7 @@ local completion = {}
 -- Import openai and quill
 package.path = "/DavinCC/?.lua;" .. package.path
 local openai = require("lib/openai-lua/openai")
-local quill = require("quill")
+local quill = require("lib/quill")
 
 -- Enable outter scope for conversation indexing
 local idxPos
@@ -15,7 +15,7 @@ local positions = {}
 function completion.request(prompt, temp, tokens) -- TODO: add config class as argument
     local cmplJSON = openai.complete("text-davinci-003", prompt, temp, tokens)
     if not cmplJSON then
-        cmplJSON = quill.scribe("/DavinCC/empty.json", "r")
+        cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
     end
 
     -- Unserialise into lua object/table
@@ -44,7 +44,7 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
     -- Reserialising for local storage
     cmplJSON = textutils.serialiseJSON(cmplOut)
     -- Storing response locally for later access
-    quill.scribe("/DavinCC/cmpl.json", "w", cmplJSON)
+    quill.scribe("/DavinCC/data/cmpl.json", "w", cmplJSON)
 
     return cmplOut
 end
@@ -53,7 +53,7 @@ end
 -- Retrieve the last Davinci response
 function completion.last()
     -- Accessing local storage
-    local cmplData = quill.scribe("/DavinCC/cmpl.json", "r")
+    local cmplData = quill.scribe("/DavinCC/data/cmpl.json", "r")
 
     -- Return as lua object/table
     return textutils.unserialiseJSON(cmplData)
@@ -65,7 +65,7 @@ function completion.greet(greetFile)
     -- Read greeting structure and write into log
     local greetStart = quill.scribe(greetFile, "r")
     idxStart = string.len(greetStart)
-    quill.scribe("/DavinCC/log.txt", "w", greetStart)
+    quill.scribe("/DavinCC/data/log.txt", "w", greetStart)
     idxPos = 1
     -- print(idxStart)
     return idxStart
@@ -78,10 +78,10 @@ function completion.continue(prompt, temp, tokens, cutoff)
 
     -- Append prompt to log
     prompt = "\nYou: " .. prompt .. "\nAI: "
-    quill.scribe("/DavinCC/log.txt", "a", prompt)
+    quill.scribe("/DavinCC/data/log.txt", "a", prompt)
 
     -- Reading and adjusting log
-    local history = quill.scribe("/DavinCC/log.txt", "r")
+    local history = quill.scribe("/DavinCC/data/log.txt", "r")
     history = string.gsub(history, "\"", "\'")
 
     -- Recording greeting and convo, as part of log
@@ -112,11 +112,11 @@ function completion.continue(prompt, temp, tokens, cutoff)
         contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
     end
     local contLog = quill.truncate(contReply["choices"][1]["text"])
-    quill.scribe("/DavinCC/log.txt", "a", contLog)
+    quill.scribe("/DavinCC/data/log.txt", "a", contLog)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
     if promptLower == "goodbye" or promptLower == "bye" then
-        quill.scribe("/DavinCC/log.txt", "w", "")
+        quill.scribe("/DavinCC/data/log.txt", "w", "")
         os.queueEvent("terminate")
     end
 
