@@ -142,7 +142,6 @@ else
 
         -- Allowing mid-convo images
         tempImg = false
-        print(string.sub(prompt, #prompt - 2))
         if string.sub(prompt, #prompt - 2) == "IMG" then
             tempImg = true
         end
