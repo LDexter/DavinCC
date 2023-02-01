@@ -7,6 +7,7 @@ local sketch = require("sketch")
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
 local isImg
+local tempImg
 personality = personality or "standard"
 personality = string.lower(personality)
 
@@ -139,8 +140,15 @@ else
         term.setTextColour(colours.orange)
         print(reply)
 
+        -- Allowing mid-convo images
+        tempImg = false
+        print(string.sub(prompt, #prompt - 2))
+        if string.sub(prompt, #prompt - 2) == "IMG" then
+            tempImg = true
+        end
+
         -- Generating image if true
-        if isImg then
+        if isImg or tempImg then
             sleep(1)
             sketch.generate(reply, number, size)
             print("I made an image...\n")
