@@ -44,6 +44,13 @@ function quill.seek(str, pattern, stop)
 end
 
 
+function quill.replace(str, pattern, repl)
+    pattern = pattern:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]", function(c) return "%" .. c end)
+    str = str:gsub(pattern, repl)
+    return str
+end
+
+
 -- Capitalises first letter
 function quill.firstUpper(str)
     return (str:gsub("^%l", string.upper))

@@ -83,7 +83,9 @@ local function config(prompt)
             size = tblImg["s"]
         end
         isImg = true
-        prompt = string.gsub(prompt, flag.call, "")
+
+        prompt = quill.replace(prompt, "[IMG]" .. flag.call, "")
+        prompt = quill.trailSpace(prompt)
     else
         isImg = false
     end

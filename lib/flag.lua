@@ -49,16 +49,18 @@ function flag.img(prompt)
             tblArgs = flag.next(flag.call)
 
             -- Convert number ("n") argument
-            tblOut["n"] = tonumber(tblArgs["n"])
+            tblArgs["n"] = tonumber(tblArgs["n"])
             -- Input testing for number
             if type(tblArgs["n"]) == "number" then
                 if tblArgs["n"] < 1 then
                     tblOut["n"] = 1
                 elseif tblArgs["n"] > 10 then
                     tblOut["n"] = 10
+                else
+                    tblOut["n"] = tblArgs["n"]
                 end
             end
-            
+
             -- Convert size ("s") argument
             if tblArgs["s"] == "sm" then
                 tblOut["s"] = "256x256"
