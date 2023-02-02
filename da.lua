@@ -27,7 +27,7 @@ else
 end
 
 -- Magnitude conversion, defaults to small
-local size
+local size = "256x256"
 if magnitude == "sm" then
     size = "256x256"
 elseif magnitude == "md" then
@@ -72,6 +72,7 @@ local reply
 local number
 
 
+
 -- Configure based on new prompt
 local function config(prompt)
     -- Process image flags
@@ -82,11 +83,14 @@ local function config(prompt)
             size = tblImg["s"]
         end
         isImg = true
+        prompt = string.gsub(prompt, flag.call, "")
     else
         isImg = false
     end
 
     -- TODO: other configs...
+
+    return prompt
 end
 
 
@@ -99,6 +103,8 @@ if personality == "none" then
     term.setTextColour(colours.red)
     prompt = read()
     print("\n")
+
+    prompt = config(prompt)
 
     -- Complete prompt (user input), risk (0-1), token limit
     cont = completion.request(prompt, risk, 1000)
@@ -147,7 +153,7 @@ else
         print("\n")
 
         -- Allowing mid-convo images
-        config(prompt)
+        prompt = config(prompt)
 
         -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
         cont = completion.continue(prompt, risk, 200, cutoff)

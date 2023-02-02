@@ -4,6 +4,7 @@ local quill = require("lib/quill")
 
 local imgCall = "[IMG]"
 flag.isCall = nil
+flag.call = ""
 
 
 function flag.next(args)
@@ -32,52 +33,44 @@ function flag.next(args)
 end
 
 
-function flag.params(tblArgs)
-    
-end
-
-
 -- Processes image flag
 function flag.img(prompt)
     -- Get and loop through arguments
     flag.isCall = string.find(prompt, imgCall)
-    local call = quill.seek(prompt, imgCall, " ")
+    flag.call = quill.seek(prompt, imgCall, " ")
     local tblArgs = {}
+    local tblOut = {}
+    tblOut["n"] = 1
+    tblOut["s"] = "256x256"
     -- Check for call
     if flag.isCall then
         -- Check for arguments
-        if string.find(call, "-") then
-            tblArgs = flag.next(call)
+        if string.find(flag.call, "-") then
+            tblArgs = flag.next(flag.call)
 
-            -- if tblArgs["n"] then
-                
-            -- end
             -- Convert number ("n") argument
-            tblArgs["n"] = tonumber(tblArgs["n"])
-            -- Input testing for non-number
-            if type(tblArgs["n"]) ~= "number" then
-                tblArgs["n"] = 1
-            end
-            if tblArgs["n"] < 1 then
-                tblArgs["n"] = 1
-            elseif tblArgs["n"] > 10 then
-                tblArgs["n"] = 10
+            tblOut["n"] = tonumber(tblArgs["n"])
+            -- Input testing for number
+            if type(tblArgs["n"]) == "number" then
+                if tblArgs["n"] < 1 then
+                    tblOut["n"] = 1
+                elseif tblArgs["n"] > 10 then
+                    tblOut["n"] = 10
+                end
             end
             
             -- Convert size ("s") argument
             if tblArgs["s"] == "sm" then
-                tblArgs["s"] = "256x256"
+                tblOut["s"] = "256x256"
             elseif tblArgs["s"] == "md" then
-                tblArgs["s"] = "512x512"
+                tblOut["s"] = "512x512"
             elseif tblArgs["s"] == "lg" then
-                tblArgs["s"] = "1024x1024"
-            else
-                tblArgs["s"] = "256x256"
+                tblOut["s"] = "1024x1024"
             end
         end
     end
     -- Return arguments
-    return tblArgs
+    return tblOut
 end
 
 return flag
