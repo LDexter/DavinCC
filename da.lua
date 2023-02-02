@@ -3,11 +3,11 @@ package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("lib/completion")
 local quill = require("lib/quill")
 local sketch = require("lib/sketch")
+local flag = require("lib/flag")
 
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
 local isImg
-local tempImg
 personality = personality or "standard"
 personality = string.lower(personality)
 
@@ -69,7 +69,25 @@ end
 local prompt
 local cont
 local reply
-local number = 1
+local number
+
+
+-- Configure based on new prompt
+local function config(prompt)
+    -- Process image flags
+    local tblImg = flag.img(prompt)
+    if flag.isCall then
+        if tblImg then
+            number = tblImg["n"]
+            size = tblImg["s"]
+        end
+        isImg = true
+    else
+        isImg = false
+    end
+
+    -- TODO: other configs...
+end
 
 
 -- Quick and flavourless request
@@ -128,6 +146,9 @@ else
         prompt = read()
         print("\n")
 
+        -- Allowing mid-convo images
+        config(prompt)
+
         -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
         cont = completion.continue(prompt, risk, 200, cutoff)
 
@@ -140,14 +161,8 @@ else
         term.setTextColour(colours.orange)
         print(reply)
 
-        -- Allowing mid-convo images
-        tempImg = false
-        if string.sub(prompt, #prompt - 2) == "IMG" then
-            tempImg = true
-        end
-
         -- Generating image if true
-        if isImg or tempImg then
+        if isImg then
             sleep(1)
             sketch.generate(reply, number, size)
             print("I made an image...\n")

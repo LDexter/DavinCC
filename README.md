@@ -34,7 +34,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 ---
 
-- [x] Access to what I call "personality injection" (which they simply call prompt structuring) <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/syringe.svg">
+- [x] Access to what I call "personality injection" (which they call prompt structuring) <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/syringe.svg">
 
   - Quick and easy behavioural customisation without data training
   - Fully embraces whatever personality you describe
@@ -51,6 +51,14 @@ Conversations require a greetName.txt file with a custom personality description
   - Even evolves based on its own replies, through habitual growth
   - You are capable of swaying its habits (if you're convincing enough!)
   - Is capable of remorse, regret, and apologising
+
+---
+
+- [x] Powerful prompt commands at the ready <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/terminal.svg">
+  - Call commands left and right, anywhere within a prompt
+  - **Future feature:** stack multiple calls like a true command slinger!
+  - Mix it up with near unix-like flag arguments
+  - Quick and simple syntax, that wont ruin your prompts
 
 ---
 
@@ -91,15 +99,23 @@ Conversations require a greetName.txt file with a custom personality description
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
 5. Run `da` for a conversation interface and enjoy!
 
-## The Programs
+## Running `da`
 
 `da.lua` enables you to run `da [personality] [risk] [cutoff] [img](t,f) [magnitude](sm,md,lg)`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, 5 cutoff, false img, sm magnitude. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. **_Img_**, if true, tells DavinCC to generate images using [DALL-CC](https://github.com/LDexter/DALL-CC) throughout a conversation, provided the [DALL-CC](https://github.com/LDexter/DALL-CC) library is located at root. All image links will be written to `/DALL-CC/data/out.txt`. **_Magnitude_** only appies to image size.
+
+### Calling Prompt Commands With Arguments
+
+The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`. First comes `[CMDNAME]`, which indicates the command being called, in caps and wrapped by square brackets. Next is an arbitrary number of arguments in key-value pairs, with keys only being single letter IDs, separated by dashes and no spaces. An example command that could be pasted as-is would be: `[IMG]-n4-smd`. This tells [DALL-CC](https://github.com/LDexter/DALL-CC) (if installed) to generate an image based on DavinCC's next response (`[IMG]`), that is reproduced to create 4 renders in total (`-n4`), which are all of size medium (`-smd`).
+
+## DALL-vinci Conversational Image Generation
 
 Producing AI-generated images, that are prompted by AI-generated text requires as little effort as: _"imagine a photograph/artwork/cartoon of a bird"_. The value achieved here is immese, as your input consists of one word: "bird", while DavinCC's output is a verbose breakdown of your bird in great artistic detail... and DALL-CC **_loves detail_**. An example output from this incredible AI tag-team effort is linked below.
 
 ### DALL-vinci Output Sample
 
 ![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
+
+## Other Programs
 
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
 

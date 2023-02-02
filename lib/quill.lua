@@ -1,7 +1,7 @@
 local quill = {}
 
 
--- Write, read, or append to a file
+-- Writes, reads, or appends to a file
 function quill.scribe(path, mode, input)
     local text
     local file = fs.open(path, mode)
@@ -15,25 +15,48 @@ function quill.scribe(path, mode, input)
 end
 
 
--- Insert into a string at provided position
+-- Inserts into a string at provided position
 function quill.insert(str1, str2, pos)
     return str1:sub(1,pos) .. str2 .. str1:sub(pos+1)
 end
 
 
--- Capitalise first letter
+-- Finds text starting after a pattern, up to a stopping pattern
+function quill.seek(str, pattern, stop)
+    -- Find start and end index
+    local seekStart = string.find(str, pattern)
+    local seekEnd
+    if seekStart then
+        seekEnd = string.find(str, stop, seekStart + 1)
+    else
+        return ""
+    end
+    -- Accounting for missing stop
+    if seekEnd then
+        seekEnd = seekEnd - 1
+    else
+        seekEnd = #str
+    end
+
+    -- Isolate desired text
+    local seekOut = string.sub(str, seekStart + #pattern - 1, seekEnd)
+    return seekOut
+end
+
+
+-- Capitalises first letter
 function quill.firstUpper(str)
     return (str:gsub("^%l", string.upper))
 end
 
 
--- Remove trailing spaces
+-- Removes trailing spaces
 function quill.trailSpace(str)
     return string.gsub(str, '[ \t]+%f[\r\n%z]', '')
 end
 
 
--- Truncate newlines into spaces
+-- Truncates newlines into spaces
 function quill.truncate(str)
     -- Eliminate all newlines and account for double spaces
     str = string.gsub(str, "\n", " ")
@@ -43,7 +66,7 @@ function quill.truncate(str)
 end
 
 
--- End string with ellipsis
+-- Ends string with ellipsis
 function quill.toBeContd(str)
     str = quill.trailSpace(str)
     return str .. "..."
