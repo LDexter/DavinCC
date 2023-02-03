@@ -122,7 +122,7 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 ![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
 
-### Potential Future `da` Features
+## Potential Future `da` Features
 
 Here are some of the planned prompt commands, with their placeholder arguments:
 
