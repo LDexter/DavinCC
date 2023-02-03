@@ -105,7 +105,14 @@ Conversations require a greetName.txt file with a custom personality description
 
 ### Calling Prompt Commands With Arguments
 
-The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`. First comes `[CMDNAME]`, which indicates the command being called, in caps and wrapped by square brackets. Next is an arbitrary number of arguments in key-value pairs, with keys only being single letter IDs, separated by dashes and no spaces. An example command that could be pasted as-is would be: `[IMG]-n4-smd`. This tells [DALL-CC](https://github.com/LDexter/DALL-CC) (if installed) to generate an image based on DavinCC's next response (`[IMG]`), that is reproduced to create 4 renders in total (`-n4`), which are all of size medium (`-smd`).
+The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`. First comes `[CMDNAME]`, which indicates the command being called, in caps and wrapped by square brackets. Next is an arbitrary number of arguments in key-value pairs, with keys only being single letter IDs, separated by dashes and no spaces.
+
+- An example command that could be pasted as-is would be: `[IMG]-n4-smd`.
+  - This tells [DALL-CC](https://github.com/LDexter/DALL-CC) to generate an image based on DavinCC's next response (`[IMG]`),
+  - that is reproduced to create 4 renders in total (`-n4`),
+  - which are all of size medium (`-smd`).
+
+The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be installed on root, alongside DavinCC.
 
 ## DALL-vinci Conversational Image Generation
 
