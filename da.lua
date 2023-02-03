@@ -90,7 +90,7 @@ local function config(prompt)
         isImg = false
     end
 
-    -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet, [SELF]-ggreet, [LIST]-llines
+    -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
     return prompt
 end
