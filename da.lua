@@ -106,6 +106,7 @@ if personality == "none" then
     prompt = read()
     print("\n")
 
+    -- Configuring based on prompt commands
     prompt = config(prompt)
 
     -- Complete prompt (user input), risk (0-1), token limit
@@ -154,7 +155,7 @@ else
         prompt = read()
         print("\n")
 
-        -- Allowing mid-convo images
+        -- Configuring based on prompt commands
         prompt = config(prompt)
 
         -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
