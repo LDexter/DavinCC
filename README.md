@@ -122,6 +122,23 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 ![DALL-vinci output](https://github.com/LDexter/fontawesome/blob/main/DavinCC/DALLvinci.png)
 
+### Potential Future `da` Features
+
+Here are some of the planned prompt commands, with their placeholder arguments:
+
+`[INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines`
+
+Explained:
+
+- `[INS]`, to insert text from a file. File arg: `-finput.txt`, with automatic absolute path detection.
+- `[PMPT]`, to modify standard prompt settings. Risk arg: `-r0.5`. Cutoff arg: `-c10`. Tokens arg: `-t100`.
+- `[PER]`, to swap personalities mid-convo. Greet arg: `-gstandard`, for the new personality. Replay arg: `-rtrue`, to gain personality-accurate context within existing cutoff.
+- `[SELF]`, to have the current personality initiate a conversation with another personality. Greet arg: `-gstandard`, for the other personality.
+- `[LIST]`, to preserve the AI's attempt at replying with newlines for lists (eg, 1. 2. or A. B.). Lines arg: `-l2`, to specify how many newlines per entry in a list.
+
+Changes made by all of these commands will be reset upon each new prompt.
+If you have suggestions on any of this, now would be the best time to let me know!
+
 ## Other Programs
 
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
