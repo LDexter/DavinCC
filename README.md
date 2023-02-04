@@ -114,6 +114,22 @@ The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`
 
 The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be installed on root, alongside DavinCC.
 
+## Using `dalib`
+
+This library opens up the same power of `da` to be utilised in your own projects, just like so:
+
+```lua
+-- Simple usage of dalib, a library version of the da user interface for conversations
+--* dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
+dalib.setup("standard")
+-- Once setup, dalib is prepped and ready for these parameters
+dalib.run("Tell me about ants")
+print(dalib.reply .. "\n")
+-- Contextual call-back to prove the AI understands what "their" could mean
+dalib.run("Tell me about their colonies")
+print(dalib.reply .. "\n")
+```
+
 ## DALL-vinci Conversational Image Generation
 
 Producing AI-generated images, that are prompted by AI-generated text requires as little effort as: _"imagine a photograph/artwork/cartoon of a bird"_. The value achieved here is immese, as your input consists of one word: "bird", while DavinCC's output is a verbose breakdown of your bird in great artistic detail... and DALL-CC **_loves detail_**. An example output from this incredible AI tag-team effort is linked below.

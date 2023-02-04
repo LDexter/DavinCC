@@ -26,6 +26,7 @@ print(last .. "\n")
 
 
 -- Simple usage of dalib, a library version of the da user interface for conversations
+--* dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
 dalib.setup("standard")
 -- Once setup, dalib is prepped and ready for these parameters
 dalib.run("Tell me about ants")
