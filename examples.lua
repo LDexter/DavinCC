@@ -2,6 +2,7 @@
 package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("lib/completion")
 local quill = require("lib/quill")
+local dalib = require("lib/dalib")
 
 -- Conversation arguments
 local personality = "standard"
@@ -24,13 +25,23 @@ last = last["choices"][1]["text"]
 print(last .. "\n")
 
 
--- Initiate a conversation
+-- Simple usage of dalib, a library version of the da user interface for conversations
+dalib.setup("standard")
+-- Once setup, dalib is prepped and ready for these parameters
+dalib.run("Tell me about ants")
+print(dalib.reply .. "\n")
+-- Contextual call-back to prove the AI understands what "their" could mean
+dalib.run("Tell me about their colonies")
+print(dalib.reply .. "\n")
+
+
+-- Initiate a "DIY" conversation, as barebones and lightweight version of da
 completion.greet(greetFile)
 local start = quill.scribe(greetFile, "r")
 print(start .. "\n")
 
 
--- Continue the conversation indefinately
+-- Continue the conversation indefinately, similar to da
 local prompt
 local cont
 while true do
