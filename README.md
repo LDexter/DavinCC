@@ -103,9 +103,11 @@ Conversations require a greetName.txt file with a custom personality description
 
 `da.lua` enables you to run `da [personality] [risk] [cutoff] [img](t,f) [magnitude](sm,md,lg)`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, 5 cutoff, false img, sm magnitude. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. **_Img_**, if true, tells DavinCC to generate images using [DALL-CC](https://github.com/LDexter/DALL-CC) throughout a conversation, provided the [DALL-CC](https://github.com/LDexter/DALL-CC) library is located at root. All image links will be written to `/DALL-CC/data/out.txt`. **_Magnitude_** only appies to image size.
 
+## Prompt Commands of `da`
+
 ### Calling Prompt Commands With Arguments
 
-The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`. First comes `[CMDNAME]`, which indicates the command being called, in caps and wrapped by square brackets. Next is an arbitrary number of arguments in key-value pairs, with keys only being single letter IDs, separated by dashes and no spaces.
+The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`. First comes `[CMDNAME]`, which indicates the command being called, in caps and wrapped by square brackets. Next is an arbitrary number of arguments `-kvalue-kvalue` in key-value pairs, with keys only being single letter IDs, separated by dashes and no spaces.
 
 - An example command that could be pasted as-is would be: `[IMG]-n4-smd`.
   - This tells [DALL-CC](https://github.com/LDexter/DALL-CC) to generate an image based on DavinCC's next response (`[IMG]`),
@@ -113,6 +115,17 @@ The syntax for calling a prompt command is as follows: `[CMDNAME]-kvalue-kvalue`
   - which are all of size medium (`-smd`).
 
 The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be installed on root, alongside DavinCC.
+
+### Current Prompt Commands
+
+- `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply.
+  - Note: all image links will be written to `/DALL-CC/data/out.txt`.
+  - Number arg: `-n1`, to specify the number of gens on the same reply (1-10).
+  - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large).
+- `[VAR]`, to reassign a variable that the AI is aware of (must start as x=1 or x=thing, etc).
+  - Note: always blocks prompt from AI processing and modifies the chat log instead.
+  - Name arg: `-nfoo`, when idetifying the variable name (mandatory as 1st arg).
+  - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg).
 
 ## Using `dalib`
 
