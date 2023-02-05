@@ -124,7 +124,7 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large).
 - `[VAR]`, to reassign a variable that the AI is aware of (must start as x=1 or x=thing, etc).
   - Note: always blocks prompt from AI processing and modifies the chat log instead.
-  - Name arg: `-nfoo`, when idetifying the variable name (mandatory as 1st arg).
+  - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg).
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg).
 
 ## Using `dalib`
