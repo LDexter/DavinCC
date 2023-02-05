@@ -29,7 +29,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 - [x] Conversations that carry into **infinity -** **_and beyond_** <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/planet-ringed.svg">
 
-  - Optional reply capping that allows old inputs to expire, releaving the AI from having to process an increasingly bloated chatlog (where context is stored)
+  - Optional reply scope cap that allows old inputs to expire, releaving the AI from having to process an increasingly bloated chatlog (where context is stored)
   - This ability to "forget" means you can cheat the OpenAI prompting limits with a conversation that evolves over the span of a week... _or a couple millennia_
 
 ---
@@ -119,13 +119,15 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 ### Current Prompt Commands
 
 - `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply.
-  - Note: all image links will be written to `/DALL-CC/data/out.txt`.
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10).
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large).
-- `[VAR]`, to reassign a variable that the AI is aware of (must start as x=1 or x=thing, etc).
-  - Note: always blocks prompt from AI processing and modifies the chat log instead.
+  - **Note:** all image links will be written to `/DALL-CC/data/out.txt`.
+- `[VAR]`, to reassign variables that the AI is aware of.
   - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg).
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg).
+  - **Note:** can be chained indefinitely: `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88`
+  - **Note:** always blocks prompt from AI processing and modifies the chat log instead.
+  - **Note:** must already exist in conversation as `x=1` or `x=thing`, etc
 
 ## Using `dalib`
 
