@@ -3,32 +3,97 @@ local flag = {}
 local quill = require("lib/quill")
 
 local imgCall = "[IMG]"
+local varCall = "[VAR]"
 flag.isCall = nil
 flag.call = ""
 
 
-function flag.next(args)
+-- Separates flagging into argument table
+function flag.separate(args)
+    -- String subbing
     local argEnd = 1
     local arg
+    -- Detection
     local remain = args
     local more = true
-    local tblArgs = {}
+    -- Outputting
     local key
     local val
+    local tblArgs = {}
+
+    -- Loop over all -kvalue pairs (arguments)
     repeat
         -- Check for more args
         if string.find(args, "-", argEnd + 1) then
+            -- Store next arg while more remain
             arg = quill.seek(remain, "-", "-")
             argEnd = argEnd + #arg
             remain = string.sub(remain, argEnd)
         else
+            -- Store last arg
             arg = string.sub(args, argEnd)
             more = false
         end
-        key = string.sub(arg, 2, 2)
-        val = string.sub(arg, 3)
-        tblArgs[key] = val
+
+        if arg then
+            -- Separate into substrings
+            key = string.sub(arg, 2, 2)
+            val = string.sub(arg, 3)
+
+            -- Store pairs
+            tblArgs[key] = val
+        else
+            more = false
+        end
     until not more
+
+    -- Return table with arg names as keys
+    return tblArgs
+end
+
+
+-- Separates flagging into nested argument table
+function flag.shift(args)
+    -- String subbing
+    local name
+    local value
+    -- Detection
+    local remain = args
+    local more = true
+    -- Outputting
+    local tblArgs = {}
+    local idxArg = 1
+
+    -- Loop over all -kvalue pairs (arguments)
+    repeat
+        -- Seek out names within dashes and update remaining
+        name = quill.seek(remain, "-", "-")
+        remain = quill.replace(remain, name, "")
+
+        -- Seek out values within dashes and update remaining
+        value = quill.seek(remain, "-", "-")
+        remain = quill.replace(remain, value, "")
+
+        -- Check for remaining
+        if #remain <= 1 then
+            more = false
+        end
+
+        if name and value then
+            -- Isolate actual content
+            name = string.sub(name, 3)
+            value = string.sub(value, 3)
+
+            -- Append to table
+            tblArgs[idxArg] = { name, value }
+            idxArg = idxArg + 1
+        else
+            more = false
+        end
+
+    until not more
+
+    -- Return table with arg names and values nested
     return tblArgs
 end
 
@@ -37,16 +102,17 @@ end
 function flag.img(prompt)
     -- Get and loop through arguments
     flag.isCall = string.find(prompt, imgCall)
-    flag.call = quill.seek(prompt, imgCall, " ")
+    flag.call = quill.seek(prompt, imgCall, "%s")
     local tblArgs = {}
     local tblOut = {}
     tblOut["n"] = 1
     tblOut["s"] = "256x256"
+
     -- Check for call
     if flag.isCall then
         -- Check for arguments
         if string.find(flag.call, "-") then
-            tblArgs = flag.next(flag.call)
+            tblArgs = flag.separate(flag.call)
 
             -- Convert number ("n") argument
             tblArgs["n"] = tonumber(tblArgs["n"])
@@ -73,6 +139,47 @@ function flag.img(prompt)
     end
     -- Return arguments
     return tblOut
+end
+
+-- Processes variable flag
+function flag.var(prompt)
+    -- Get and loop through arguments
+    flag.isCall = string.find(prompt, varCall)
+    flag.call = quill.seek(prompt, varCall, "%s")
+    local tblArgs = {}
+    local name
+    local value
+
+    -- Check for call
+    if flag.isCall then
+        -- Check for arguments
+        if string.find(flag.call, "-") then
+            -- Shift args into nested table
+            tblArgs = flag.shift(flag.call)
+            
+            -- Loop through argument entries
+            for _, entry in pairs(tblArgs) do
+                -- Store names and values
+                name = quill.literalize(entry[1])
+                value = entry[2]
+
+                -- Read log
+                local log = quill.scribe("/DavinCC/data/log.txt", "r")
+
+                -- Loop through locations in log and replace for each
+                local old = quill.seek(log, name .. "=", "%s")
+
+                -- Overwrite log
+                if #old > 0 then
+                    log = quill.replace(log, old, "=" .. value)
+                    quill.scribe("/DavinCC/data/log.txt", "w", log)
+                end
+            end
+        end
+    end
+
+    -- Return arguments
+    return tblArgs
 end
 
 return flag

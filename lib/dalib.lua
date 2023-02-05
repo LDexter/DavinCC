@@ -8,6 +8,7 @@ local sketch = require("lib/sketch")
 local flag = require("lib/flag")
 
 local personality, risk, cutoff, img, magnitude
+local isPrompt = true
 local isImg
 local size
 local number
@@ -87,6 +88,10 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
         quill.scribe(greetFile, "r")
     end
 
+    --! No startup print
+    local cont = completion.continue("hello", risk, 200, cutoff)
+    dalib.reply = cont["choices"][1]["text"]
+
     -- Return UX-ready concat of all basic variables
     return "Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img
 end
@@ -94,23 +99,51 @@ end
 
 -- Configure based on new prompt
 local function config(prompt)
-    -- Process image flags
+    local confImg = "[IMG]"
+    local confVar = "[VAR]"
+
+    --* Process image flags
     local tblImg = flag.img(prompt)
+
+    -- Check calling for [IMG]
     if flag.isCall then
+        -- Check output
         if tblImg then
             number = tblImg["n"]
             size = tblImg["s"]
         end
+
+        -- Prepare for image
         isImg = true
 
-        prompt = quill.replace(prompt, "[IMG]" .. flag.call, "")
-        prompt = quill.trailSpace(prompt)
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confImg .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
     else
+        -- Stop preparing for image
         isImg = false
+    end
+
+
+    --* Process variable flags
+    local tblVar = flag.var(prompt)
+
+    -- Check calling for [VAR]
+    if flag.isCall then
+        -- Stop prompting
+        isPrompt = false
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confVar .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    else
+        -- Re-enable prompting
+        isPrompt = true
     end
 
     -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
+    -- Return new prompt
     return prompt
 end
 
@@ -147,32 +180,31 @@ function dalib.run(prompt)
 
     -- Otherwise, conduct conversation with chosen personality
     else
-        --! No startup print
-        cont = completion.continue("hello", risk, 200, cutoff)
-
         --! No prompt print
 
         -- Configuring based on prompt commands
         prompt = config(prompt)
 
-        -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-        cont = completion.continue(prompt, risk, 200, cutoff)
+        if isPrompt then
+            -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
+            cont = completion.continue(prompt, risk, 200, cutoff)
 
-        -- Store truncated reply
-        reply = cont["choices"][1]["text"]
-        reply = quill.truncate(reply)
-        quill.scribe("/DavinCC/data/out.txt", "w", reply)
+            -- Store truncated reply
+            reply = cont["choices"][1]["text"]
+            reply = quill.truncate(reply)
+            quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
-        -- Send reply out for library access
-        dalib.reply = reply
+            -- Send reply out for library access
+            dalib.reply = reply
 
-        --! No reply print
+            --! No reply print
 
-        -- Generating image if true
-        if isImg then
-            sleep(1)
-            sketch.generate(reply, number, size)
-            print("I made an image...\n")
+            -- Generating image if true
+            if isImg then
+                sleep(1)
+                sketch.generate(reply, number, size)
+                print("I made an image...\n")
+            end
         end
     end
 

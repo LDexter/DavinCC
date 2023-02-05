@@ -7,6 +7,7 @@ local flag = require("lib/flag")
 
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
+local isPrompt = true
 local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
@@ -75,23 +76,51 @@ local number
 
 -- Configure based on new prompt
 local function config(prompt)
-    -- Process image flags
+    local confImg = "[IMG]"
+    local confVar = "[VAR]"
+
+    --* Process image flags
     local tblImg = flag.img(prompt)
+
+    -- Check calling for [IMG]
     if flag.isCall then
+        -- Check output
         if tblImg then
             number = tblImg["n"]
             size = tblImg["s"]
         end
+
+        -- Prepare for image
         isImg = true
 
-        prompt = quill.replace(prompt, "[IMG]" .. flag.call, "")
-        prompt = quill.trailSpace(prompt)
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confImg .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
     else
+        -- Stop preparing for image
         isImg = false
+    end
+
+
+    --* Process variable flags
+    local tblVar = flag.var(prompt)
+
+    -- Check calling for [VAR]
+    if flag.isCall then
+        -- Stop prompting
+        isPrompt = false
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confVar .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    else
+        -- Re-enable prompting
+        isPrompt = true
     end
 
     -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
+    -- Return new prompt
     return prompt
 end
 
@@ -158,23 +187,24 @@ else
         -- Configuring based on prompt commands
         prompt = config(prompt)
 
-        -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-        cont = completion.continue(prompt, risk, 200, cutoff)
+        if isPrompt then
+            -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
+            cont = completion.continue(prompt, risk, 200, cutoff)
 
-        -- Store truncated reply
-        reply = cont["choices"][1]["text"]
-        reply = quill.truncate(reply)
-        quill.scribe("/DavinCC/data/out.txt", "w", reply)
+            -- Store truncated reply
+            reply = cont["choices"][1]["text"]
+            reply = quill.truncate(reply)
+            quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
-        -- Print output as orange
-        term.setTextColour(colours.orange)
-        print(reply)
+            -- Print output as orange
+            term.setTextColour(colours.orange)
+            print(reply)
 
-        -- Generating image if true
-        if isImg then
-            sleep(1)
-            sketch.generate(reply, number, size)
-            print("I made an image...\n")
+            -- Generating image if true
+            if isImg then
+                sketch.generate(reply, number, size)
+                print("I made an image...\n")
+            end
         end
     end
 end

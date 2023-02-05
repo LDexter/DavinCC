@@ -116,7 +116,6 @@ function completion.continue(prompt, temp, tokens, cutoff)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
     if promptLower == "goodbye" or promptLower == "bye" then
-        quill.scribe("/DavinCC/data/log.txt", "w", "")
         os.queueEvent("terminate")
     end
 

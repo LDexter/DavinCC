@@ -21,9 +21,19 @@ function quill.insert(str1, str2, pos)
 end
 
 
+-- Create literal-ready patterns from strings
+function quill.literalize(literal)
+    if literal then
+        literal = literal:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]", function(c) return "%" .. c end)
+    end
+    return literal
+end
+
+
 -- Finds text starting after a pattern, up to a stopping pattern
 function quill.seek(str, pattern, stop)
     -- Find start and end index
+    -- pattern = quill.literalize(pattern)
     local seekStart = string.find(str, pattern)
     local seekEnd
     if seekStart then
@@ -38,15 +48,24 @@ function quill.seek(str, pattern, stop)
         seekEnd = #str
     end
 
-    -- Isolate desired text
-    local seekOut = string.sub(str, seekStart + #pattern - 1, seekEnd)
+    local seekOut
+    if seekEnd - 1 > seekStart then
+        -- Isolate desired text
+        seekOut = string.sub(str, seekStart + #pattern - 1, seekEnd)
+    else
+        seekOut = nil
+    end
+
     return seekOut
 end
 
 
+-- Replace string literal
 function quill.replace(str, pattern, repl)
-    pattern = pattern:gsub("[%(%)%.%%%+%-%*%?%[%]%^%$]", function(c) return "%" .. c end)
-    str = str:gsub(pattern, repl)
+    pattern = quill.literalize(pattern)
+    if pattern and repl then
+        str = str:gsub(pattern, repl)
+    end
     return str
 end
 

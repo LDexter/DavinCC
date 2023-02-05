@@ -28,13 +28,27 @@ print(last .. "\n")
 -- Simple usage of dalib, a library version of the da user interface for conversations
 --* dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
 dalib.setup("standard")
--- Once setup, dalib is prepped and ready for these parameters
-dalib.run("Tell me about ants")
-print(dalib.reply .. "\n")
--- Contextual call-back to prove the AI understands what "their" could mean
-dalib.run("Tell me about their colonies")
 print(dalib.reply .. "\n")
 
+-- Once setup, dalib is prepped and ready for these parameters
+dalib.run("Tell me about ants.")
+print(dalib.reply .. "\n")
+
+-- Contextual call-back to prove the AI understands what "their" could mean
+dalib.run("Tell me about their colonies. x=1")
+print(dalib.reply .. "\n")
+
+-- Referring back to last prompt's use of "x"
+dalib.run("Solve x=")
+print(dalib.reply .. "\n")
+sleep(1)
+-- Utilising the VAR prompt command to change the value of "x" from last prompt
+dalib.run("[VAR]-nx-v42")
+sleep(1)
+-- Referring to "x" again
+dalib.run("Solve x=")
+print(dalib.reply .. "\n")
+sleep(1)
 
 -- Initiate a "DIY" conversation, as barebones and lightweight version of da
 completion.greet(greetFile)
