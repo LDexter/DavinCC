@@ -28,6 +28,9 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
     if risk then
         risk = tonumber(risk)
     end
+    if cutoff then
+        cutoff = tonumber(cutoff)
+    end
     if img then
         img = string.lower(img)
     else
