@@ -39,7 +39,7 @@ function quill.seek(str, pattern, stop)
     if seekStart then
         seekEnd = string.find(str, stop, seekStart + 1)
     else
-        return ""
+        return nil
     end
     -- Accounting for missing stop
     if seekEnd then
@@ -98,5 +98,22 @@ function quill.toBeContd(str)
     return str .. "..."
 end
 
+
+-- Sets a number to within a range, converting if necessary
+function quill.range(number, min, max, default)
+    local result = default
+
+    -- Convert number
+    if type(number) ~= "number" then
+        number = tonumber(number)
+    end
+
+    -- Ensure type and range
+    if type(number) == "number" then
+        result = math.max(min, math.min(number, max))
+    end
+
+    return result
+end
 
 return quill

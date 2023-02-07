@@ -2,6 +2,7 @@ local flag = {}
 
 local quill = require("lib/quill")
 
+local pmptCall = "[PMPT]"
 local imgCall = "[IMG]"
 local varCall = "[VAR]"
 flag.isCall = nil
@@ -98,11 +99,38 @@ function flag.shift(args)
 end
 
 
+-- Processes prompt flag
+function flag.pmpt(prompt)
+    -- Get and loop through arguments
+    flag.isCall = string.find(prompt, pmptCall)
+    flag.call = quill.seek(prompt, pmptCall, "%s") or ""
+    local tblArgs = {}
+    local tblOut = {}
+
+    -- Check for call
+    if flag.isCall then
+        -- Check for arguments
+        if string.find(flag.call, "-") then
+            tblArgs = flag.separate(flag.call)
+
+            -- Convert risk ("r") argument
+            tblOut["r"] = quill.range(tblArgs["r"], 0, 1)
+            -- Convert risk ("c") argument
+            tblOut["c"] = quill.range(tblArgs["c"], 0, 42)
+            -- Convert risk ("t") argument
+            tblOut["t"] = quill.range(tblArgs["t"], 1, 4000)
+        end
+    end
+    -- Return arguments
+    return tblOut
+end
+
+
 -- Processes image flag
 function flag.img(prompt)
     -- Get and loop through arguments
     flag.isCall = string.find(prompt, imgCall)
-    flag.call = quill.seek(prompt, imgCall, "%s")
+    flag.call = quill.seek(prompt, imgCall, "%s") or ""
     local tblArgs = {}
     local tblOut = {}
     tblOut["n"] = 1
@@ -145,7 +173,7 @@ end
 function flag.var(prompt)
     -- Get and loop through arguments
     flag.isCall = string.find(prompt, varCall)
-    flag.call = quill.seek(prompt, varCall, "%s")
+    flag.call = quill.seek(prompt, varCall, "%s") or ""
     local tblArgs = {}
     local name
     local value

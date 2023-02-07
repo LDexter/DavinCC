@@ -7,6 +7,7 @@ local flag = require("lib/flag")
 
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
+local tokens = 200
 local isPrompt = true
 local isImg
 personality = personality or "standard"
@@ -76,16 +77,31 @@ local reply
 local number
 
 
-
 -- Configure based on new prompt
 local function config(prompt)
+    local confPmpt = "[PMPT]"
     local confImg = "[IMG]"
     local confVar = "[VAR]"
 
-    --* Process image flags
-    local tblImg = flag.img(prompt)
 
-    -- Check calling for [IMG]
+    --* Process prompt flags and check for [PMPT]
+    local tblPmpt = flag.pmpt(prompt)
+    if flag.isCall then
+        -- Check output
+        if tblPmpt then
+            risk = tblPmpt["r"] or risk
+            cutoff = tblPmpt["c"] or cutoff
+            tokens = tblPmpt["t"] or tokens
+        end
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confPmpt .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
+
+
+    --* Process image flags and check for [IMG]
+    local tblImg = flag.img(prompt)
     if flag.isCall then
         -- Check output
         if tblImg then
@@ -105,10 +121,8 @@ local function config(prompt)
     end
 
 
-    --* Process variable flags
+    --* Process variable flags and check for [VAR]
     local tblVar = flag.var(prompt)
-
-    -- Check calling for [VAR]
     if flag.isCall then
         -- Stop prompting
         isPrompt = false
@@ -120,6 +134,7 @@ local function config(prompt)
         -- Re-enable prompting
         isPrompt = true
     end
+
 
     -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
@@ -142,7 +157,7 @@ if personality == "none" then
     prompt = config(prompt)
 
     -- Complete prompt (user input), risk (0-1), token limit
-    cont = completion.request(prompt, risk, 1000)
+    cont = completion.request(prompt, risk, tokens)
 
     -- Store truncated reply
     reply = cont["choices"][1]["text"]
@@ -176,7 +191,7 @@ else
 
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
-    cont = completion.continue("hello", risk, 200, cutoff)
+    cont = completion.continue("hello", risk, tokens, cutoff)
     print(cont["choices"][1]["text"])
 
     -- Continue the conversation indefinately
@@ -192,7 +207,7 @@ else
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            cont = completion.continue(prompt, risk, 200, cutoff)
+            cont = completion.continue(prompt, risk, tokens, cutoff)
 
             -- Store truncated reply
             reply = cont["choices"][1]["text"]

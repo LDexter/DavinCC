@@ -120,8 +120,12 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
+`[PMPT]-rrisk-ccutoff-ttokens`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
 
+- `[PMPT]`, to adjust standard prompt settings on the fly
+  - Risk arg: `-r0.5`, for risk factor (0-1)
+  - Cutoff arg: `-c10`, for reply cutoff (1-42 and 0 for infinite)
+  - Tokens arg: `-t100`, for token count (1-4000)
 - `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10)
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large)
