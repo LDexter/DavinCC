@@ -8,6 +8,7 @@ local sketch = require("lib/sketch")
 local flag = require("lib/flag")
 
 local personality, risk, cutoff, img, magnitude
+local tokens = 200
 local isPrompt = true
 local isImg
 local size
@@ -92,7 +93,7 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
     end
 
     --! No startup print
-    local cont = completion.continue("hello", risk, 200, cutoff)
+    local cont = completion.continue("hello", risk, tokens, cutoff)
     dalib.reply = cont["choices"][1]["text"]
 
     -- Return UX-ready concat of all basic variables
@@ -102,8 +103,25 @@ end
 
 -- Configure based on new prompt
 local function config(prompt)
+    local confPmpt = "[PMPT]"
     local confImg = "[IMG]"
     local confVar = "[VAR]"
+
+
+    --* Process prompt flags and check for [PMPT]
+    local tblPmpt = flag.pmpt(prompt)
+    if flag.isCall then
+        -- Check output
+        if tblPmpt then
+            risk = tblPmpt["r"] or risk
+            cutoff = tblPmpt["c"] or cutoff
+            tokens = tblPmpt["t"] or tokens
+        end
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confPmpt .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
 
     --* Process image flags
     local tblImg = flag.img(prompt)
@@ -164,7 +182,7 @@ function dalib.run(prompt)
         prompt = config(prompt)
 
         -- Complete prompt (user input), risk (0-1), token limit
-        cont = completion.request(prompt, risk, 1000)
+        cont = completion.request(prompt, risk, tokens)
 
         -- Store truncated reply
         reply = cont["choices"][1]["text"]
@@ -190,7 +208,7 @@ function dalib.run(prompt)
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            cont = completion.continue(prompt, risk, 200, cutoff)
+            cont = completion.continue(prompt, risk, tokens, cutoff)
 
             -- Store truncated reply
             reply = cont["choices"][1]["text"]

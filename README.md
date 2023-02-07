@@ -10,7 +10,7 @@ This program generates text in the Minecraft mod [CC:Tweaked](https://tweaked.cc
 
 DavinCC provides isolated prompting for generic replies and automated structuring for a conversational experience akin to [ChatGPT](https://chat.openai.com/chat), yet is fully customisable.
 
-Conversations require a greetName.txt file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies **_(Greeting files and conversations detailed at end)_**.
+Conversations require a greetName.txt file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies **_(Greeting files and conversations detailed after setup guide)_**.
 
 ## Greater Control Than ChatGPT?
 
@@ -98,6 +98,20 @@ Conversations require a greetName.txt file with a custom personality description
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
 5. Run `da` for a conversation interface and enjoy!
+
+## Custom Personalities Through Greeting Files
+
+1. To craft a personality, copy the `greetStandard.txt` in greetings again
+2. Rename the file to replace "Standard" with anything you like
+3. Update `local personality = "standard"` to resemble your changes
+4. Modify the **_sentences before_** `"You:"` for general descriptions
+5. Modify _text following_ `"You:"` for sample prompts
+6. Modify _text following_ `"AI:"` for sample replies
+
+Remember two things about greeting files:
+
+- Quality _and_ quantity are paramount for effective results
+- `"The following is a conversation"` and `"You:"`/`"AI:"` are off-limits from being edited, else the program will break. That being said, these are planned to be cofigurable.
 
 ## Running `da`
 
@@ -189,17 +203,3 @@ If you have suggestions on any of this, now would be the best time to let me kno
 `co.lua` (usage: `co [personality] [risk]`) is capable of reading, completing, and writing .txt files as isolated requests. Is almost like `da none` but for large text blocks.
 
 `examples.lua` is also available as a less UX-focused demo.
-
-## Custom Personalities Through Greeting Files
-
-1. To craft a personality, copy the `greetStandard.txt` in greetings again
-2. Rename the file to replace "Standard" with anything you like
-3. Update `local personality = "standard"` to resemble your changes
-4. Modify the **_sentences before_** `"You:"` for general descriptions
-5. Modify _text following_ `"You:"` for sample prompts
-6. Modify _text following_ `"AI:"` for sample replies
-
-Remember two things about greeting files:
-
-- Quality _and_ quantity are paramount for effective results
-- `"The following is a conversation"` and `"You:"`/`"AI:"` are off-limits from being edited, else the program will break. That being said, these are planned to be cofigurable.
