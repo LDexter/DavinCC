@@ -167,7 +167,7 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 Here are some of the planned prompt commands, with their placeholder arguments:
 
-`[INS]-ffile`, `[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[SELF]-ggreet`, `[LIST]-llines`
+`[INS]-ffile`, `[PER]-ggreet-rreplay`, `[SELF]-ggreet`, `[LIST]-llines`
 
 Explained:
 
