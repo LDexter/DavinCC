@@ -80,6 +80,7 @@ local number
 -- Configure based on new prompt
 local function config(prompt)
     local confPmpt = "[PMPT]"
+    local confPer = "[PER]"
     local confImg = "[IMG]"
     local confVar = "[VAR]"
 
@@ -96,6 +97,22 @@ local function config(prompt)
 
         -- Remove from prompt
         prompt = quill.replace(prompt, confPmpt .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
+
+
+    --* Process personality flags and check for [PER]
+    local tblPer = flag.per(prompt, risk, tokens, cutoff)
+    local replay
+    if flag.isCall then
+        -- Check output
+        if tblPer then
+            personality = tblPer["g"] or personality
+            replay = tblPer["r"] or replay
+        end
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confPer .. flag.call, "")
         prompt = string.gsub(prompt, " +", " ")
     end
 
@@ -124,13 +141,16 @@ local function config(prompt)
     --* Process variable flags and check for [VAR]
     local tblVar = flag.var(prompt)
     if flag.isCall then
-        -- Stop prompting
-        isPrompt = false
+        if tblVar then
+            -- Stop prompting
+            isPrompt = false
+        end
 
         -- Remove from prompt
         prompt = quill.replace(prompt, confVar .. flag.call, "")
         prompt = string.gsub(prompt, " +", " ")
-    else
+    end
+    if not flag.call or not tblVar then
         -- Re-enable prompting
         isPrompt = true
     end

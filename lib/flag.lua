@@ -1,8 +1,10 @@
 local flag = {}
 
 local quill = require("lib/quill")
+local completion = require("lib/completion")
 
 local pmptCall = "[PMPT]"
+local perCall = "[PER]"
 local imgCall = "[IMG]"
 local varCall = "[VAR]"
 flag.isCall = nil
@@ -27,7 +29,7 @@ function flag.separate(args)
         -- Check for more args
         if string.find(args, "-", argEnd + 1) then
             -- Store next arg while more remain
-            arg = quill.seek(remain, "-", "-")
+            arg = quill.seek(remain, "-", "-") or ""
             argEnd = argEnd + #arg
             remain = string.sub(remain, argEnd)
         else
@@ -115,10 +117,41 @@ function flag.pmpt(prompt)
 
             -- Convert risk ("r") argument
             tblOut["r"] = quill.range(tblArgs["r"], 0, 1)
-            -- Convert risk ("c") argument
+            -- Convert cutoff ("c") argument
             tblOut["c"] = quill.range(tblArgs["c"], 0, 42)
-            -- Convert risk ("t") argument
+            -- Convert tokens ("t") argument
             tblOut["t"] = quill.range(tblArgs["t"], 1, 4000)
+        end
+    end
+    -- Return arguments
+    return tblOut
+end
+
+
+-- Processes personality flag
+function flag.per(prompt, risk, tokens, cutoff)
+    -- Get and loop through arguments
+    flag.isCall = string.find(prompt, perCall)
+    flag.call = quill.seek(prompt, perCall, "%s") or ""
+    local tblArgs = {}
+    local tblOut = {}
+
+    -- Check for call
+    if flag.isCall then
+        -- Check for arguments
+        if string.find(flag.call, "-") then
+            tblArgs = flag.separate(flag.call)
+            -- Convert greet ("g") argument
+            tblOut["g"] = tblArgs["g"] or "standard"
+            -- Convert replay ("r") argument
+            tblOut["r"] = quill.boolify(tblArgs["r"])
+
+            local greetFile = "/DavinCC/greetings/greet" .. tblOut["g"] .. ".txt"
+            if tblOut["r"] then
+                completion.regreet(greetFile, risk, tokens, cutoff)
+            else
+                completion.greet(greetFile)
+            end
         end
     end
     -- Return arguments

@@ -67,7 +67,45 @@ function completion.greet(greetFile)
     idxStart = string.len(greetStart)
     quill.scribe("/DavinCC/data/log.txt", "w", greetStart)
     idxPos = 1
-    -- print(idxStart)
+    return idxStart
+end
+
+
+-- Re-greet AI and replay conversation
+function completion.regreet(greetFile, risk, tokens, cutoff)
+    local log = quill.scribe("/DavinCC/data/log.txt", "r")
+    local prompt
+    local replay
+    local tblReplays = {}
+
+    -- Iterate reply positions
+    cutoff = idxPos - cutoff
+    for key = cutoff, #positions do
+        -- Extract prompts
+        prompt = string.sub(log, idxStart)
+        prompt = string.sub(prompt, positions[key], positions[key + 1])
+        prompt = quill.seek(prompt, "You: ", "AI: ")
+
+        -- Store each truncated prompt for replay
+        if prompt then
+            replay = string.sub(prompt, 2)
+            replay = quill.truncate(replay)
+            replay = quill.trailSpace(replay)
+            tblReplays[key] = replay
+        end
+    end
+
+    -- Read greeting structure and write into log
+    local greetStart = quill.scribe(greetFile, "r")
+    idxStart = string.len(greetStart)
+    quill.scribe("/DavinCC/data/log.txt", "w", greetStart)
+    idxPos = 1
+
+    -- Replay each prompt
+    for _, value in pairs(tblReplays) do
+        completion.continue(value, risk, tokens, cutoff)
+    end
+
     return idxStart
 end
 

@@ -134,7 +134,7 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[PMPT]-rrisk-ccutoff-ttokens`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
+`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
 
 Explained:
 
@@ -142,6 +142,9 @@ Explained:
   - Risk arg: `-r0.5`, for risk factor (0-1)
   - Cutoff arg: `-c10`, for reply cutoff (1-42 and 0 for infinite)
   - Tokens arg: `-t100`, for token count (1-4000)
+- `[PER]`, to switch personalities on-demand
+  - Greet arg: `-gstandard`, for the new personality
+  - Replay arg: `-rtrue`, to gain personality-accurate context by parsing all prompts within cutoff scope
 - `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10)
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large)
@@ -181,15 +184,12 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 Here are some of the planned prompt commands, with their placeholder arguments:
 
-`[INS]-ffile`, `[PER]-ggreet-rreplay`, `[SELF]-ggreet`, `[LIST]-llines`
+`[INS]-ffile`, `[SELF]-ggreet`, `[LIST]-llines`
 
 Explained:
 
 - `[INS]`, to insert text from a file
   - File arg: `-finput.txt`, with automatic absolute path detection
-- `[PER]`, to swap personalities mid-convo
-  - Greet arg: `-gstandard`, for the new personality
-  - Replay arg: `-rtrue`, to gain personality-accurate context within existing cutoff
 - `[SELF]`, to have the current personality initiate a conversation with another personality
   - Greet arg: `-gstandard`, for the other personality
 - `[LIST]`, to preserve the AI's attempt at replying with newlines for lists (eg, 1. 2. or A. B.)

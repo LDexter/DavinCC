@@ -116,4 +116,20 @@ function quill.range(number, min, max, default)
     return result
 end
 
+
+function quill.boolify(str, default)
+    local bool = default
+
+    -- Translating string to boolean
+    if str == "true" or str == "t" or str == "1" then
+        str = "true"
+        bool = true
+    elseif str == "false" or str == "f" or str == "0" then
+        str = "false"
+        bool = false
+    end
+
+    return bool
+end
+
 return quill
