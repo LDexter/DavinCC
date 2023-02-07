@@ -122,6 +122,8 @@ All prompt commands, with their placeholder arguments:
 
 `[PMPT]-rrisk-ccutoff-ttokens`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
 
+Explained:
+
 - `[PMPT]`, to adjust standard prompt settings on the fly
   - Risk arg: `-r0.5`, for risk factor (0-1)
   - Cutoff arg: `-c10`, for reply cutoff (1-42 and 0 for infinite)
@@ -171,10 +173,6 @@ Explained:
 
 - `[INS]`, to insert text from a file
   - File arg: `-finput.txt`, with automatic absolute path detection
-- `[PMPT]`, to modify standard prompt settings
-  - Risk arg: `-r0.5`
-  - Cutoff arg: `-c10`
-  - Tokens arg: `-t100`
 - `[PER]`, to swap personalities mid-convo
   - Greet arg: `-gstandard`, for the new personality
   - Replay arg: `-rtrue`, to gain personality-accurate context within existing cutoff
