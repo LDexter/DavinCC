@@ -134,7 +134,7 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`
+`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`, `[CLRr]`
 
 Explained:
 
@@ -145,6 +145,8 @@ Explained:
 - `[PER]`, to switch personalities on-demand
   - Greet arg: `-gstandard`, for the new personality
   - Replay arg: `-rtrue`, to gain personality-accurate context by parsing all prompts within cutoff scope
+- `[INS]`, to insert text from a file in `/DavinCC/data/`, at the exact location of the command
+  - File arg: `-fitem.txt`, when speciying a file other than the default `in.txt`
 - `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10)
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large)
@@ -155,6 +157,7 @@ Explained:
   - **Note:** can be chained indefinitely: `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88`
   - **Note:** always blocks prompt from AI processing and modifies the chat log instead
   - **Note:** must already exist in conversation as `var=1`, `item=thing`, etc
+- `[CLR]`, to clear the terminal without prompting the AI
 
 ## Using `dalib`
 
@@ -184,12 +187,10 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 Here are some of the planned prompt commands, with their placeholder arguments:
 
-`[INS]-ffile`, `[SELF]-ggreet`, `[LIST]-llines`
+`[SELF]-ggreet`, `[LIST]-llines`
 
 Explained:
 
-- `[INS]`, to insert text from a file
-  - File arg: `-finput.txt`, with automatic absolute path detection
 - `[SELF]`, to have the current personality initiate a conversation with another personality
   - Greet arg: `-gstandard`, for the other personality
 - `[LIST]`, to preserve the AI's attempt at replying with newlines for lists (eg, 1. 2. or A. B.)

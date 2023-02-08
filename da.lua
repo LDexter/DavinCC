@@ -77,12 +77,22 @@ local reply
 local number
 
 
+-- Prepare for inserting
+if not fs.exists("/DavinCC/data/in.txt") then
+    quill.scribe("/DavinCC/data/in.txt", "w", "")
+end
+
+
 -- Configure based on new prompt
 local function config(prompt)
     local confPmpt = "[PMPT]"
     local confPer = "[PER]"
+    local confIns = "[INS]"
+    local confClr = "[CLR]"
     local confImg = "[IMG]"
     local confVar = "[VAR]"
+
+    isPrompt = true
 
 
     --* Process prompt flags and check for [PMPT]
@@ -113,6 +123,35 @@ local function config(prompt)
 
         -- Remove from prompt
         prompt = quill.replace(prompt, confPer .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
+
+
+    --* Process insert flags and check for [INS]
+    -- TODO: automatic absolute path detection
+    local tblIns = flag.ins(prompt)
+    if flag.isCall then
+        -- Remove from prompt before modifying
+        prompt = quill.replace(prompt, confIns .. flag.call, "  ")
+
+        -- Check output
+        if tblIns then
+            if tblIns["f"] then
+                -- Appending file name to path
+                local insFile = "/DavinCC/data/" .. tblIns["f"]
+
+                -- Checking for file extension
+                if not string.find(tblIns["f"], "%.") then
+                    insFile = insFile .. ".txt"
+                end
+
+                -- Reading and inserting file contents
+                local insertion = quill.scribe(insFile, "r")
+                prompt = quill.insert(prompt, insertion, flag.isCall)
+            end
+        end
+
+        -- Remove spaces after modifying
         prompt = string.gsub(prompt, " +", " ")
     end
 
@@ -150,15 +189,30 @@ local function config(prompt)
         prompt = quill.replace(prompt, confVar .. flag.call, "")
         prompt = string.gsub(prompt, " +", " ")
     end
-    if not flag.call or not tblVar then
+    if not tblVar then
         -- Re-enable prompting
         isPrompt = true
+    end
+    
+    
+    --* Check for [CLR]
+    if quill.seek(prompt, confClr, "%s") then
+        isPrompt = false
+
+        -- Clear terminal and reset pos
+        term.clear()
+        term.setCursorPos(1, 1)
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confClr, "")
+        prompt = string.gsub(prompt, " +", " ")
     end
 
 
     -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
-    -- Return new prompt
+    -- Return new trail-less prompt
+    prompt = quill.trailSpace(prompt)
     return prompt
 end
 

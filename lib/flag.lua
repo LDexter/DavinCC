@@ -5,6 +5,7 @@ local completion = require("lib/completion")
 
 local pmptCall = "[PMPT]"
 local perCall = "[PER]"
+local insCall = "[INS]"
 local imgCall = "[IMG]"
 local varCall = "[VAR]"
 flag.isCall = nil
@@ -159,6 +160,30 @@ function flag.per(prompt, risk, tokens, cutoff)
 end
 
 
+-- Processes personality flag
+function flag.ins(prompt)
+    -- Get and loop through arguments
+    flag.isCall = string.find(prompt, insCall)
+    flag.call = quill.seek(prompt, insCall, "%s") or ""
+    local tblArgs = {}
+    local tblOut = {}
+
+    -- Check for call
+    if flag.isCall then
+        -- Check for arguments
+        if string.find(flag.call, "-") then
+            tblArgs = flag.separate(flag.call)
+            -- Convert file ("f") argument
+        end
+
+        -- Always insert, defaulting to in.txt
+        tblOut["f"] = tblArgs["f"] or "in"
+    end
+    -- Return arguments
+    return tblOut
+end
+
+
 -- Processes image flag
 function flag.img(prompt)
     -- Get and loop through arguments
@@ -224,10 +249,8 @@ function flag.var(prompt)
                 name = quill.literalize(entry[1])
                 value = entry[2]
 
-                -- Read log
+                -- Read log and store old content
                 local log = quill.scribe("/DavinCC/data/log.txt", "r")
-
-                -- Loop through locations in log and replace for each
                 local old = quill.seek(log, name .. "=", "%s")
 
                 -- Overwrite log
