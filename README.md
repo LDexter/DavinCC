@@ -134,7 +134,7 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`, `[CLRr]`
+`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`, `[CLR]`
 
 Explained:
 
