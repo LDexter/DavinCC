@@ -193,12 +193,10 @@ local function config(prompt)
         -- Re-enable prompting
         isPrompt = true
     end
-    
-    
+
+
     --* Check for [CLR]
     if quill.seek(prompt, confClr, "%s") then
-        isPrompt = false
-
         -- Clear terminal and reset pos
         term.clear()
         term.setCursorPos(1, 1)
@@ -212,7 +210,7 @@ local function config(prompt)
     -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
 
     -- Return new trail-less prompt
-    prompt = quill.trailSpace(prompt)
+    -- prompt = quill.trailSpace(prompt)
     return prompt
 end
 

@@ -105,7 +105,8 @@ end
 -- Processes prompt flag
 function flag.pmpt(prompt)
     -- Get and loop through arguments
-    flag.isCall = string.find(prompt, pmptCall)
+    local pattCall = quill.literalize(pmptCall)
+    flag.isCall = string.find(prompt, pattCall)
     flag.call = quill.seek(prompt, pmptCall, "%s") or ""
     local tblArgs = {}
     local tblOut = {}
@@ -132,7 +133,8 @@ end
 -- Processes personality flag
 function flag.per(prompt, risk, tokens, cutoff)
     -- Get and loop through arguments
-    flag.isCall = string.find(prompt, perCall)
+    local pattCall = quill.literalize(perCall)
+    flag.isCall = string.find(prompt, pattCall)
     flag.call = quill.seek(prompt, perCall, "%s") or ""
     local tblArgs = {}
     local tblOut = {}
@@ -163,7 +165,8 @@ end
 -- Processes personality flag
 function flag.ins(prompt)
     -- Get and loop through arguments
-    flag.isCall = string.find(prompt, insCall)
+    local pattCall = quill.literalize(insCall)
+    flag.isCall = string.find(prompt, pattCall)
     flag.call = quill.seek(prompt, insCall, "%s") or ""
     local tblArgs = {}
     local tblOut = {}
@@ -187,7 +190,8 @@ end
 -- Processes image flag
 function flag.img(prompt)
     -- Get and loop through arguments
-    flag.isCall = string.find(prompt, imgCall)
+    local pattCall = quill.literalize(imgCall)
+    flag.isCall = string.find(prompt, pattCall)
     flag.call = quill.seek(prompt, imgCall, "%s") or ""
     local tblArgs = {}
     local tblOut = {}
@@ -230,7 +234,8 @@ end
 -- Processes variable flag
 function flag.var(prompt)
     -- Get and loop through arguments
-    flag.isCall = string.find(prompt, varCall)
+    local pattCall = quill.literalize(varCall)
+    flag.isCall = string.find(prompt, pattCall)
     flag.call = quill.seek(prompt, varCall, "%s") or ""
     local tblArgs = {}
     local name
