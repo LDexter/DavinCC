@@ -177,7 +177,7 @@ print(dalib.reply .. "\n")
 
 ## DALL-vinci Conversational Image Generation
 
-Producing AI-generated images, that are prompted by AI-generated text requires as little effort as: _"imagine a photograph/artwork/cartoon of a bird"_. The value achieved here is immese, as your input consists of one word: "bird", while DavinCC's output is a verbose breakdown of your bird in great artistic detail... and DALL-CC **_loves detail_**. An example output from this incredible AI tag-team effort is linked below.
+Producing AI-generated images, that are prompted by AI-generated text requires as little effort as: _"Imagine a photograph/artwork/cartoon of a bird. Describe."_. The value achieved here is immese, as your input consists of two key words: "artwork" + "bird", while DavinCC's output is a verbose breakdown of your bird in great artistic detail... and DALL-CC **_loves detail_**. An example output from this incredible AI tag-team effort is linked below.
 
 ### DALL-vinci Output Sample
 

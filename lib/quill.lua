@@ -5,10 +5,10 @@ local quill = {}
 function quill.scribe(path, mode, input)
     local text
     local file = fs.open(path, mode)
-    if mode == "r" then
+    if mode == "r" or mode == "rb" then
         text = file.readAll()
         return text
-    elseif mode == "w" or mode == "a" then
+    elseif mode == "w" or mode == "a" or mode == "wb" or mode == "ab" then
         file.write(input)
     end
     file.close()
