@@ -33,16 +33,12 @@ end
 
 -- Magnitude conversion, defaults to small
 local size = "256x256"
-local factor = 2
 if magnitude == "sm" then
     size = "256x256"
-    local factor = 2
 elseif magnitude == "md" or magnitude == "lg" then  -- Medium AND large
     size = "512x512"
-    factor = 3
 elseif magnitude == "lg" then   --! Large images not rendering, thus temporarily disabled
     size = "1024x1024"
-    factor = 4
 end
 
 -- Input testing for non-number
@@ -167,13 +163,6 @@ local function config(prompt)
         if tblImg then
             number = tblImg["n"]
             size = tblImg["s"]
-            if size == "256x256" then
-                factor = 2
-            elseif size == "512x512" or size == "1024x1024" then  -- Medium AND large
-                factor = 3
-            elseif size == "1024x1024" then   --! Large images not rendering, thus temporarily disabled
-                factor = 4
-            end
         end
 
         -- Prepare for image
@@ -255,7 +244,7 @@ if personality == "none" then
     if isImg then
         local links = sketch.generate(reply, number, size)
         print("I made an image...\n")
-        sketch.display(links, factor)
+        sketch.display(links)
     end
 
 
@@ -305,7 +294,7 @@ else
             if isImg then
                 local links = sketch.generate(reply, number, size)
                 print("I made an image...\n")
-                sketch.display(links, factor)
+                sketch.display(links)
             end
         end
     end

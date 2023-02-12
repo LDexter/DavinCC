@@ -34,24 +34,19 @@ function sketch.generate(prompt, number, size)
 end
 
 
-function sketch.display(links, factor)
+function sketch.display(links)
     term.setTextColour(colours.orange)
     print("Generated...\n")
 
-
-    --! USE MAKE DIR FUNCTION
     -- Define and make image directory
     local dirGen = "/DALL-CC/images/gen/"
     local dirOut = "/DALL-CC/images/out/"
 
-
     fs.delete(dirGen)
     fs.delete(dirOut)
 
-
     fs.makeDir(dirGen)
     fs.makeDir(dirOut)
-
 
     -- Use pngLua to render each in ComputerCraft
     for count, url in pairs(links) do
@@ -71,7 +66,7 @@ function sketch.display(links, factor)
             -- Display and save generations
             quill.scribe(pathGen, "wb", png)
             print("Saved...\n")
-            canvas.render(pathGen, factor, pathOut)
+            canvas.render(pathGen, pathOut)
 
             -- Clear and repeat upon any user input
             os.pullEvent("char")
