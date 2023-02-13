@@ -157,6 +157,7 @@ Explained:
   - **Note:** can be chained indefinitely: `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88`
   - **Note:** always blocks prompt from AI processing and modifies the chat log instead
   - **Note:** must already exist in conversation as `var=1`, `item=thing`, etc
+  - **Note:** awareness of variables is dependent on the cutoff scope
 - `[CLR]`, to clear the terminal without prompting the AI
 
 ## Using `dalib`
