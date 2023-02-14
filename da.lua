@@ -1,3 +1,12 @@
+-- Check for invalid repository name
+local isMain = fs.exists("/DavinCC-main/")
+local isDavin = fs.exists("/DavinCC/")
+if isMain then
+    error("Incorrect repository name, please rename DavinCC-main to simply DavinCC.")
+elseif not isDavin then
+    error("Incorrect repository location or name, please ensure DavinCC is installed on root, as /DavinCC/.")
+end
+
 -- Import completion and quill
 package.path = "/DavinCC/?.lua;" .. package.path
 local completion = require("lib/completion")
