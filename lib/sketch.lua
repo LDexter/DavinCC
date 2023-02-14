@@ -5,12 +5,22 @@ local pathOG = package.path
 package.path = "/DALL-CC/?.lua;" .. package.path
 local openai = require("lib/openai-lua/openai")
 local quill = require("lib/quill")
+
+-- Import canvas
 package.path = "/DALL-CC/lib/pngLua/?.lua;" .. pathOG
-local canvas = require("lib/canvas")
+local isCanv, canvas = pcall(require, "lib/canvas")
+if not isCanv then
+    canvas =  setmetatable({}, {__index=function () error("Canvas not found.") end})
+end
 
 
 -- Generates image with DALL-E using prompt, number, and size
 function sketch.generate(prompt, number, size)
+    local isDALL = fs.exists("/DALL-CC/")
+    if not isDALL then
+        error("DALL-CC not found.")
+    end
+
     local gen = openai.generate(prompt, number, size)
     local links = {}
 
