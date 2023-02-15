@@ -17,6 +17,7 @@ local flag = require("lib/flag")
 -- User input for risk and personality
 local personality, risk, cutoff, img, magnitude = ...
 local tokens = 200
+local isInput = true
 local isPrompt = true
 local isImg
 personality = personality or "standard"
@@ -97,9 +98,10 @@ local function config(prompt)
     local confPmpt = "[PMPT]"
     local confPer = "[PER]"
     local confIns = "[INS]"
-    local confClr = "[CLR]"
     local confImg = "[IMG]"
+    local confSelf = "[SELF]"
     local confVar = "[VAR]"
+    local confClr = "[CLR]"
 
     isPrompt = true
 
@@ -186,9 +188,24 @@ local function config(prompt)
     end
 
 
+    --* Process self flags and check for [SELF]
+    local tblSelf = flag.self(prompt, risk, tokens, cutoff)
+    if flag.isCall then
+        -- Check output
+        if tblSelf then
+            personality = tblSelf["g"] or personality
+            isInput = false
+        end
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confSelf .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
+
+
     --* Process variable flags and check for [VAR]
     local tblVar = flag.var(prompt)
-    if flag.isCall then
+    if flag.isCall and isInput then
         if tblVar then
             -- Stop prompting
             isPrompt = false
@@ -216,11 +233,40 @@ local function config(prompt)
     end
 
 
-    -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
+    -- TODO: other configs... [SELF]-ggreet, [LIST]-llines
 
     -- Return new trail-less prompt
     -- prompt = quill.trailSpace(prompt)
     return prompt
+end
+
+
+local function promptSelf()
+    -- Allow cancellation
+    print("Continue? (y/n)")
+    sleep(1)
+    local _, ans = os.pullEvent("char")
+
+    local x, y = term.getCursorPos()
+    term.setCursorPos(x, y - 1)
+    term.clearLine()
+
+    if ans == "y" then
+        -- Continue conversation with self
+        cont = completion.continueSelf(reply, risk, tokens, cutoff)
+
+        -- Store and print truncated prompt
+        prompt = cont["choices"][1]["text"]
+        prompt = quill.truncate(prompt)
+        quill.scribe("/DavinCC/data/out.txt", "w", prompt)
+        print(prompt)
+        sleep(1)
+        isInput = false
+
+    elseif ans == "n" then
+        isInput = true
+        prompt = read()
+    end
 end
 
 
@@ -273,18 +319,23 @@ else
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
     cont = completion.continue("hello", risk, tokens, cutoff)
-    print(cont["choices"][1]["text"])
+    reply = cont["choices"][1]["text"]
+    print(reply)
 
     -- Continue the conversation indefinately
     while true do
         -- Read input as red
         print("\n")
         term.setTextColour(colours.red)
-        prompt = read()
-        print("\n")
-
+        if isInput then
+            prompt = read()
+        end
         -- Configuring based on prompt commands
         prompt = config(prompt)
+        if not isInput then
+            promptSelf()
+            print("\n")
+        end
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)

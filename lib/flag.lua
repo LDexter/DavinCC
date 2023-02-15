@@ -7,6 +7,7 @@ local pmptCall = "[PMPT]"
 local perCall = "[PER]"
 local insCall = "[INS]"
 local imgCall = "[IMG]"
+local selfCall = "[SELF]"
 local varCall = "[VAR]"
 flag.isCall = nil
 flag.call = ""
@@ -230,6 +231,34 @@ function flag.img(prompt)
     -- Return arguments
     return tblOut
 end
+
+
+-- Processes personality flag
+function flag.self(prompt, risk, tokens, cutoff)
+    -- Get and loop through arguments
+    local pattCall = quill.literalize(selfCall)
+    flag.isCall = string.find(prompt, pattCall)
+    flag.call = quill.seek(prompt, selfCall, "%s") or ""
+    local tblArgs = {}
+    local tblOut = {}
+
+    -- Check for call
+    if flag.isCall then
+        -- Check for arguments
+        if string.find(flag.call, "-") then
+            tblArgs = flag.separate(flag.call)
+            -- Convert greet ("g") argument
+            tblOut["g"] = tblArgs["g"] or "standard"
+
+            -- Setup new greeting
+            local greetFile = "/DavinCC/greetings/greet" .. tblOut["g"] .. ".txt"
+            completion.greet(greetFile, true)
+        end
+    end
+    -- Return arguments
+    return tblOut
+end
+
 
 -- Processes variable flag
 function flag.var(prompt)

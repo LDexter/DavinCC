@@ -134,7 +134,7 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[VAR]-nname-vvalue`, `[CLR]`
+`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[SELF]-ggreet`, `[VAR]-nname-vvalue`, `[CLR]`
 
 Explained:
 
@@ -143,7 +143,7 @@ Explained:
   - Cutoff arg: `-c10`, for reply cutoff (1-42 and 0 for infinite)
   - Tokens arg: `-t100`, for token count (1-4000)
 - `[PER]`, to switch personalities on-demand
-  - Greet arg: `-gstandard`, for the new personality
+  - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
   - Replay arg: `-rtrue`, to gain personality-accurate context by parsing all prompts within cutoff scope
 - `[INS]`, to insert text from a file in `/DavinCC/data/`, at the exact location of the command
   - File arg: `-fitem.txt`, when speciying a file other than the default `in.txt`
@@ -151,6 +151,9 @@ Explained:
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10)
   - Size arg: `-smd`, for image size (sm: small, md: medium, lg: large)
   - **Note:** all image links will be written to `/DALL-CC/data/out.txt`
+- `[SELF]`, to engage the AI in a conversation with itself, using an optional alternative personality
+  - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
+  - **Note:** not currently supported by the dalib library
 - `[VAR]`, to reassign variables that the AI is aware of
   - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg)
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg)
@@ -188,12 +191,10 @@ Producing AI-generated images, that are prompted by AI-generated text requires a
 
 Here are some of the planned prompt commands, with their placeholder arguments:
 
-`[SELF]-ggreet`, `[LIST]-llines`
+`[LIST]-llines`
 
 Explained:
 
-- `[SELF]`, to have the current personality initiate a conversation with another personality
-  - Greet arg: `-gstandard`, for the other personality
 - `[LIST]`, to preserve the AI's attempt at replying with newlines for lists (eg, 1. 2. or A. B.)
   - Lines arg: `-l2`, to specify how many newlines per entry in a list
 
