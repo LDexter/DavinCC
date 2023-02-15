@@ -153,7 +153,7 @@ Explained:
   - **Note:** all image links will be written to `/DALL-CC/data/out.txt`
 - `[SELF]`, to engage the AI in a conversation with itself, using an optional alternative personality
   - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
-  - **Note:** not currently supported by the dalib library
+  - **Note:** not currently supported by the `dalib` library
 - `[VAR]`, to reassign variables that the AI is aware of
   - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg)
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg)
