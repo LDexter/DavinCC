@@ -17,7 +17,20 @@ local positionsSelf = {}
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens) -- TODO: add config class as argument
     local cmplJSON = openai.complete("text-davinci-003", prompt, temp, tokens)
+    -- Check for empty response
     if not cmplJSON then
+        -- Check for moderation flagging
+        if openai.isFlagged then
+            print("PROMPT FLAGGED FOR:")
+            -- Iterate flag categories
+            for key, value in pairs(openai.flags.categories) do
+                -- Print all true categories
+                if value then
+                    print(key)
+                end
+            end
+        end
+        -- Fill with dummy JSON when empty
         cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
     end
 
@@ -41,6 +54,21 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
 
         if choice["finish_reason"] == "length" then
             choice["text"] = quill.toBeContd(choice["text"])
+        end
+
+        if openai.isFilter then
+            openai.filter(choice["text"])
+            -- Check for moderation flagging
+            if openai.isFlagged then
+                print("RESPONSE FLAGGED FOR:")
+                -- Iterate flag categories
+                for key, value in pairs(openai.flags.categories) do
+                    -- Print all true categories
+                    if value then
+                        print(key)
+                    end
+                end
+            end
         end
     end
 
