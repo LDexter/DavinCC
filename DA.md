@@ -1,4 +1,4 @@
-# DavinCC
+# DavinCC and the `da` Interface
 
 #### ChatGPT, but better. _And in Minecraft._
 
