@@ -78,7 +78,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 - [x] Faster and more reliable, with "ChatGPT Pro" now taking priority over free users <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/rabbit-running.svg">
 
-  - Also at a **_zero-cost price point_**, as this relies upon tokens that are provided in ample supply by OpenAI for free - no card required
+  - Responses are recieved with speed and consistency
 
 ---
 

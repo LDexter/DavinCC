@@ -78,7 +78,7 @@ Conversations require a greetName.txt file with a custom personality description
 
 - [x] Faster and more reliable, with "ChatGPT Pro" now taking priority over free users <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/rabbit-running.svg">
 
-  - Also at a **_zero-cost price point_**, as this relies upon tokens that are provided in ample supply by OpenAI for free - no card required
+  - Responses are recieved with speed and consistency
 
 ---
 
@@ -155,12 +155,17 @@ Explained:
   - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
   - **Note:** not currently supported by the `dalib` library
 - `[VAR]`, to reassign variables that the AI is aware of
+
   - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg)
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg)
-  - **Note:** can be chained indefinitely: `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88`
+  - **Note:** can be chained indefinitely:
+
+    `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88-nstr-wow`
+
   - **Note:** always blocks prompt from AI processing and modifies the chat log instead
   - **Note:** must already exist in conversation as `var=1`, `item=thing`, etc
   - **Note:** awareness of variables is dependent on the cutoff scope
+
 - `[CLR]`, to clear the terminal without prompting the AI
 
 ## Using `dalib`
@@ -197,9 +202,6 @@ Explained:
 
 - `[LIST]`, to preserve the AI's attempt at replying with newlines for lists (eg, 1. 2. or A. B.)
   - Lines arg: `-l2`, to specify how many newlines per entry in a list
-
-Changes made by all of these commands will be reset upon each new prompt
-If you have suggestions on any of this, now would be the best time to let me know!
 
 ## Other Programs
 
