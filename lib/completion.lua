@@ -138,7 +138,8 @@ function completion.continue(prompt, temp, tokens, cutoff)
     local promptLower = string.lower(prompt)
 
     -- Append prompt to log
-    prompt = "\nYou: " .. prompt .. "\nAI: "
+    local append = prompt
+    prompt = "\nYou: " .. append .. "\nAI: "
     quill.scribe("/DavinCC/data/log.txt", "a", prompt)
 
     -- Reading and adjusting log
@@ -165,6 +166,13 @@ function completion.continue(prompt, temp, tokens, cutoff)
     prompt = quill.truncate(prompt)
     local idxPrompt = string.len(prompt)
     completion.request(prompt, temp, tokens)
+
+    if openai.isFlagged then
+        local logFlagged = quill.scribe("/DavinCC/data/log.txt", "r")
+        local logSafe = quill.replace(logFlagged, append, "?")
+        quill.scribe("/DavinCC/data/log.txt", "w", logSafe)
+    end
+
     local contReply = completion.last()
     local contText = contReply["choices"][1]["text"]
 
