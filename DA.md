@@ -102,10 +102,6 @@ Remember two things about greeting files:
 - Quality _and_ quantity are paramount for effective results
 - `"The following is a conversation"` and `"You:"`/`"AI:"` are off-limits from being edited, else the program will break. That being said, these are planned to be cofigurable.
 
-## Running `da`
-
-`da.lua` enables you to run `da [personality] [risk] [cutoff] [img](t,f) [magnitude](sm,md,lg)`, with all arguments being optional. Arguments default to "standard" personality, 0 risk, 5 cutoff, false img, sm magnitude. **_Personality_** can be the corresponding suffix to your custom greeting file. Personality can also be `"none"` for a dedicated quick-and-easy flavourless mode where the Davinci model is simply queried once, using your input following the program call. **_Risk_** range is a 0-1 floating point number (0.1, 0.2, 0.3, etc) and enables the AI to take more risks and become more inventive or random. **_Cutoff_** sets the maximum number of replies the AI keeps track of, to help reduce token costs and stay within OpenAI's preset token limits per prompt. There is a maximum cutoff of 42 replies, simply because each reply can generate a varying number of tokens. **_Img_**, if true, tells DavinCC to generate images using [DALL-CC](https://github.com/LDexter/DALL-CC) throughout a conversation, provided the [DALL-CC](https://github.com/LDexter/DALL-CC) library is located at root. All image links will be written to `/DALL-CC/data/out.txt`. **_Magnitude_** only appies to image size.
-
 ## Prompt Commands of `da`
 
 ### Calling Prompt Commands With Arguments
@@ -144,12 +140,17 @@ Explained:
   - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
   - **Note:** not currently supported by the `dalib` library
 - `[VAR]`, to reassign variables that the AI is aware of
+
   - Name arg: `-nfoo`, when identifying the variable name (mandatory as 1st arg)
   - Value arg: `-v42`, when assigning the value (mandatory as 2nd arg)
-  - **Note:** can be chained indefinitely: `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88`
+  - **Note:** can be chained indefinitely:
+
+    `[VAR]-nfoo-v42-nbar-vthing-nx-v70-ny-v88-nstr-wow`
+
   - **Note:** always blocks prompt from AI processing and modifies the chat log instead
   - **Note:** must already exist in conversation as `var=1`, `item=thing`, etc
   - **Note:** awareness of variables is dependent on the cutoff scope
+
 - `[CLR]`, to clear the terminal without prompting the AI
 
 ## DALL-vinci Conversational Image Generation
