@@ -55,21 +55,6 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
         if choice["finish_reason"] == "length" then
             choice["text"] = quill.toBeContd(choice["text"])
         end
-
-        if openai.isFilter then
-            openai.filter(choice["text"])
-            -- Check for moderation flagging
-            if openai.isFlagged then
-                print("RESPONSE FLAGGED FOR:")
-                -- Iterate flag categories
-                for key, value in pairs(openai.flags.categories) do
-                    -- Print all true categories
-                    if value then
-                        print(key)
-                    end
-                end
-            end
-        end
     end
 
     -- Reserialising for local storage

@@ -16,13 +16,20 @@ end
 
 -- Generates image with DALL-E using prompt, number, and size
 function sketch.generate(prompt, number, size)
-    local isDALL = fs.exists("/DALL-CC/")
-    if not isDALL then
-        error("DALL-CC not found.")
-    end
-
     local gen = openai.generate(prompt, number, size)
     local links = {}
+
+    -- Checking for flags
+    if openai.isFlagged then
+        print("PROMPT FLAGGED FOR:")
+        -- Iterate flag categories
+        for key, value in pairs(openai.flags.categories) do
+            -- Print all true categories
+            if value then
+                print(key)
+            end
+        end
+    end
 
     -- Error image if failed
     if not gen then
