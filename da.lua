@@ -387,11 +387,11 @@ elseif model == "chat" then
             prompt = read()
         end
         --TODO: Configuring based on prompt commands
-        -- prompt = config(prompt)
-        -- if not isInput then
-        --     promptSelf()
-        --     print("\n")
-        -- end
+        prompt = config(prompt)
+        if not isInput then
+            promptSelf()
+            print("\n")
+        end
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)

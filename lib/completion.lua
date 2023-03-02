@@ -105,6 +105,12 @@ function completion.chat(prompt, risk, tokens, cutoff)
     log[pos]["content"] = reply
     logJSON = textutils.serialiseJSON(log)
     quill.scribe("/DavinCC/data/log.json", "w", logJSON)
+
+    -- Clear logs and terminate program if prompted with goodbye/bye keywords
+    if prompt == "goodbye" or prompt == "bye" then
+        os.queueEvent("terminate")
+    end
+
     return reply
 end
 
