@@ -127,14 +127,19 @@ end
 
 -- Greet AI and prepare for conversation
 function completion.greet(greetFile, greetSelf, chat) --! Add support for gpt-3.5-turbo
+    -- Read greeting structure
+    local greetStart = quill.scribe(greetFile, "r")
     -- Create new log JSON for chat
+    local greetJSON
     if chat then
-        local empty = '[{"role": "system", "content": "You are a helpful assistant."}]'
-        quill.scribe("/DavinCC/data/log.json", "w", empty)
+        if greetStart == "" then
+            greetJSON = '[{"role": "system", "content": "You are a helpful assistant."}]'
+            greetStart = greetJSON
+        end
+        quill.scribe("/DavinCC/data/log.json", "w", greetStart)
     end
 
-    -- Read greeting structure and write into log
-    local greetStart = quill.scribe(greetFile, "r")
+    -- Write into log
     if not greetSelf then
         idxStart = string.len(greetStart)
         idxPos = 1

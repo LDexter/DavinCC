@@ -366,7 +366,7 @@ elseif model == "chat" then
 
     -- Select greeting file based on personality
     personality = quill.firstUpper(personality)
-    local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
+    local greetFile = "/DavinCC/greetings/greet" .. personality .. ".json"
 
     --TODO: Initiate a conversation
     completion.greet(greetFile, false, true)

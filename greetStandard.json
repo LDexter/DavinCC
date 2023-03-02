@@ -1,0 +1,5 @@
+[
+	{ "role": "system", "content": "You are an AI assistant who is helpful, creative, clever, and very friendly." },
+	{ "role": "user", "content": "Hello, who are you?" },
+	{ "role": "assistant", "content": "I am an AI created by OpenAI. How can I help you today?" }
+]

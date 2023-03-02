@@ -10,7 +10,7 @@ This program generates text in the Minecraft mod [CC:Tweaked](https://tweaked.cc
 
 DavinCC provides isolated prompting for generic replies and automated structuring for a conversational experience akin to [ChatGPT](https://chat.openai.com/chat), yet is fully customisable. Powered by all their major models (including Chat's own `gpt-3.5-turbo`), this program was already pushing more "openness" than OpenAI's latest software release... though DavinCC's sizable additions have pushed that envelope even further!
 
-Conversations require a greetName.txt file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies **_(Greeting files and conversations detailed after setup guide)_**.
+Conversations require a greetName.txt/greetName.json file with a custom personality description and sample replies in plain English. Their power is enhanced with quality and quantity in descriptions and sample replies **_(Greeting files and conversations detailed after setup guide)_**.
 
 ## Greater Control Than ChatGPT?
 
@@ -96,7 +96,7 @@ Conversations require a greetName.txt file with a custom personality description
    2. Paste the API key into `template.env`, replacing the sample key
    3. Rename template.env to just .env
 3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
-4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` inside
+4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` + `greetStandard.json` inside
 5. Run `da` for a conversation interface and enjoy!
 
 ## Custom Personalities Through Greeting Files

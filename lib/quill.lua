@@ -3,6 +3,9 @@ local quill = {}
 
 -- Writes, reads, or appends to a file
 function quill.scribe(path, mode, input)
+    if not fs.exists(path) then
+        return ""
+    end
     local text
     local file = fs.open(path, mode)
     if mode == "r" or mode == "rb" then
