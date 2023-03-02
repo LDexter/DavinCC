@@ -16,12 +16,12 @@ local positionsSelf = {}
 
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens, model) -- TODO: add config class as argument
-    -- Check model --! TODO: Add other models
+    -- Check model
     local modelName
     if model == "chat" then
         modelName = "gpt-3.5-turbo"
     else
-        modelName = "text-davinci-003"
+        modelName = model
     end
     local cmplJSON = openai.complete(modelName, prompt, temp, tokens)
 
