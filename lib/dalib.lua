@@ -94,7 +94,7 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
 
     --! No startup print
     local cont = completion.continue("hello", risk, tokens, cutoff)
-    dalib.reply = cont["choices"][1]["text"]
+    dalib.reply = cont
 
     -- Return UX-ready concat of all basic variables
     return "Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img
@@ -251,7 +251,7 @@ function dalib.run(prompt)
         cont = completion.request(prompt, risk, tokens)
 
         -- Store truncated reply
-        reply = cont["choices"][1]["text"]
+        reply = cont
         reply = quill.truncate(reply)
         quill.scribe("/DavinCC/out.txt", "w", reply)
 
@@ -277,7 +277,7 @@ function dalib.run(prompt)
             cont = completion.continue(prompt, risk, tokens, cutoff)
 
             -- Store truncated reply
-            reply = cont["choices"][1]["text"]
+            reply = cont
             reply = quill.truncate(reply)
             quill.scribe("/DavinCC/data/out.txt", "w", reply)
 

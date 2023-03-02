@@ -30,7 +30,7 @@ completion.request("Say this is a test", 0, 10)
 
 -- Source locally stored response and print text from first choice
 local last = completion.last()
-last = last["choices"][1]["text"]
+last = last
 print(last .. "\n")
 
 
@@ -73,5 +73,5 @@ while true do
     prompt = read()
     -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
     cont = completion.continue(prompt, risk, tokens, cutoff)
-    print(cont["choices"][1]["text"])
+    print(cont)
 end

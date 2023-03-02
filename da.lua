@@ -15,13 +15,14 @@ local sketch = require("lib/sketch")
 local flag = require("lib/flag")
 
 -- User input for risk and personality
-local personality, risk, cutoff, img, magnitude = ...
+local personality, risk, cutoff, model, img, magnitude = ...
 local tokens = 200
 local isInput = true
 local isPrompt = true
 local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
+model = model or "chat"
 
 -- Input conversion
 if risk then
@@ -256,7 +257,7 @@ local function promptSelf()
         cont = completion.continueSelf(reply, risk, tokens, cutoff)
 
         -- Store and print truncated prompt
-        prompt = cont["choices"][1]["text"]
+        prompt = cont
         prompt = quill.truncate(prompt)
         quill.scribe("/DavinCC/data/out.txt", "w", prompt)
         print(prompt)
@@ -287,7 +288,7 @@ if personality == "none" then
     cont = completion.request(prompt, risk, tokens)
 
     -- Store truncated reply
-    reply = cont["choices"][1]["text"]
+    reply = cont
     reply = quill.truncate(reply)
     quill.scribe("/DavinCC/out.txt", "w", reply)
 
@@ -304,7 +305,7 @@ if personality == "none" then
 
 
 -- Otherwise, conduct conversation with chosen personality
-else
+elseif model ~= "chat" then
     -- Printing chosen arguments
     print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img)
 
@@ -319,7 +320,7 @@ else
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
     cont = completion.continue("hello", risk, tokens, cutoff)
-    reply = cont["choices"][1]["text"]
+    reply = cont
     print(reply)
 
     -- Continue the conversation indefinately
@@ -342,7 +343,62 @@ else
             cont = completion.continue(prompt, risk, tokens, cutoff)
 
             -- Store truncated reply
-            reply = cont["choices"][1]["text"]
+            reply = cont
+            reply = quill.truncate(reply)
+            quill.scribe("/DavinCC/data/out.txt", "w", reply)
+
+            -- Print output as orange
+            term.setTextColour(colours.orange)
+            print(reply)
+
+            -- Generating image if true
+            if isImg then
+                local links = sketch.generate(reply, number, size)
+                print("I made an image...\n")
+                sketch.display(links)
+            end
+        end
+    end
+    
+elseif model == "chat" then
+    -- Printing chosen arguments
+    print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img)
+
+    -- Select greeting file based on personality
+    personality = quill.firstUpper(personality)
+    local greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
+
+    --TODO: Initiate a conversation
+    completion.greet(greetFile, false, true)
+    -- quill.scribe(greetFile, "r")
+
+    -- Start with reply to "hello" prompt
+    term.setTextColour(colours.orange)
+    cont = completion.chat("hello", risk, tokens, cutoff)
+    reply = cont
+    print(reply)
+
+    -- Continue the conversation indefinately
+    while true do
+        -- Read input as red
+        print("\n")
+        term.setTextColour(colours.red)
+        if isInput then
+            prompt = read()
+        end
+        --TODO: Configuring based on prompt commands
+        -- prompt = config(prompt)
+        -- if not isInput then
+        --     promptSelf()
+        --     print("\n")
+        -- end
+
+        if isPrompt then
+            -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
+            cont = completion.chat(prompt, risk, tokens, cutoff)
+
+            -- Store truncated reply
+            reply = cont
             reply = quill.truncate(reply)
             quill.scribe("/DavinCC/data/out.txt", "w", reply)
 

@@ -15,8 +15,16 @@ local positionsSelf = {}
 
 
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
-function completion.request(prompt, temp, tokens) -- TODO: add config class as argument
-    local cmplJSON = openai.complete("text-davinci-003", prompt, temp, tokens)
+function completion.request(prompt, temp, tokens, model) -- TODO: add config class as argument
+    -- Check model --! TODO: Add other models
+    local modelName
+    if model == "chat" then
+        modelName = "gpt-3.5-turbo"
+    else
+        modelName = "text-davinci-003"
+    end
+    local cmplJSON = openai.complete(modelName, prompt, temp, tokens)
+
     -- Check for empty response
     if not cmplJSON then
         -- Check for moderation flagging
@@ -33,27 +41,29 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
         -- Fill with dummy JSON when empty
         cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
     end
-
+    
     -- Unserialise into lua object/table
     local cmplOut = textutils.unserialiseJSON(cmplJSON)
+    if model ~= "chat" then
     -- Test choices for contextless summaries
-    for _, choice in pairs(cmplOut["choices"]) do
-        -- Find opening space to indicate lack of context
-        local summStart = string.find(choice["text"], " ")
-        if summStart == 1 then
-            -- Capitalise first letter of prompt
-            prompt = quill.firstUpper(prompt)
+        for _, choice in pairs(cmplOut["choices"]) do
+            -- Find opening space to indicate lack of context
+            local summStart = string.find(choice["text"], " ")
+            if summStart == 1 then
+                -- Capitalise first letter of prompt
+                prompt = quill.firstUpper(prompt)
 
-            -- Concatenate prompt as prefix to response and semicolon as suffix to summary
-            choice["text"] = prompt .. choice["text"]
-            local summEnd = string.find(choice["text"], "\n") or false
-            if summEnd then
-                choice["text"] = quill.insert(choice["text"], ";", summEnd - 1)
+                -- Concatenate prompt as prefix to response and semicolon as suffix to summary
+                choice["text"] = prompt .. choice["text"]
+                local summEnd = string.find(choice["text"], "\n") or false
+                if summEnd then
+                    choice["text"] = quill.insert(choice["text"], ";", summEnd - 1)
+                end
             end
-        end
 
-        if choice["finish_reason"] == "length" then
-            choice["text"] = quill.toBeContd(choice["text"])
+            if choice["finish_reason"] == "length" then
+                choice["text"] = quill.toBeContd(choice["text"])
+            end
         end
     end
 
@@ -62,7 +72,33 @@ function completion.request(prompt, temp, tokens) -- TODO: add config class as a
     -- Storing response locally for later access
     quill.scribe("/DavinCC/data/cmpl.json", "w", cmplJSON)
 
-    return cmplOut
+    -- Returning only text output
+    if model == "chat" then
+        return cmplOut["choices"][1]["message"]["content"]
+    else
+        return cmplOut["choices"][1]["text"]
+    end
+end
+
+
+-- Process chat-specific functions
+function completion.chat(prompt, risk, tokens, cutoff)
+    local logJSON
+    local log
+
+    -- Read and add to log table
+    logJSON = quill.scribe("/DavinCC/data/log.json", "r")
+    log = textutils.unserialiseJSON(logJSON)
+    local pos = #log + 1
+    log[pos] = {}
+    log[pos]["role"] = "user"
+    log[pos]["content"] = prompt
+
+    -- Append to log and send request
+    logJSON = textutils.serialiseJSON(log)
+    quill.scribe("/DavinCC/data/log.json", "w", logJSON)
+    local chat = completion.request(logJSON, risk, tokens, "chat")
+    return chat
 end
 
 
@@ -77,7 +113,13 @@ end
 
 
 -- Greet AI and prepare for conversation
-function completion.greet(greetFile, greetSelf)
+function completion.greet(greetFile, greetSelf, chat) --! Add support for gpt-3.5-turbo
+    -- Create new log JSON for chat
+    if chat then
+        local empty = '[{"role": "system", "content": "You are a helpful assistant."}]'
+        quill.scribe("/DavinCC/data/log.json", "w", empty)
+    end
+
     -- Read greeting structure and write into log
     local greetStart = quill.scribe(greetFile, "r")
     if not greetSelf then
@@ -95,7 +137,7 @@ end
 
 
 -- Re-greet AI and replay conversation
-function completion.regreet(greetFile, risk, tokens, cutoff)
+function completion.regreet(greetFile, risk, tokens, cutoff)    --! Add support for gpt-3.5-turbo
     local log = quill.scribe("/DavinCC/data/log.txt", "r")
     local prompt
     local replay
@@ -178,9 +220,9 @@ function completion.continue(prompt, temp, tokens, cutoff)
 
     -- Cut history if present and append fully-truncated reply to log
     if string.find(contText, "The following is a conversation") then    -- TODO: add flexible matching
-        contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
+        contReply = string.sub(contText, idxPrompt + 2)
     end
-    local contLog = quill.truncate(contReply["choices"][1]["text"])
+    local contLog = quill.truncate(contReply)
     quill.scribe("/DavinCC/data/log.txt", "a", contLog)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
@@ -226,13 +268,13 @@ function completion.continueSelf(prompt, temp, tokens, cutoff)
     local idxPrompt = string.len(prompt)
     completion.request(prompt, temp, tokens)
     local contReply = completion.last()
-    local contText = contReply["choices"][1]["text"]
+    local contText = contReply
 
     -- Cut history if present and append fully-truncated reply to log
     if string.find(contText, "The following is a conversation") then    -- TODO: add flexible matching
-        contReply["choices"][1]["text"] = string.sub(contText, idxPrompt + 2)
+        contReply = string.sub(contText, idxPrompt + 2)
     end
-    local contLog = quill.truncate(contReply["choices"][1]["text"])
+    local contLog = quill.truncate(contReply)
     quill.scribe("/DavinCC/data/logSelf.txt", "a", contLog)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
