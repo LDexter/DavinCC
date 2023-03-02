@@ -86,7 +86,7 @@ function completion.chat(prompt, risk, tokens, cutoff)
     local logJSON
     local log
 
-    -- Read and add to log table
+    -- Read and add prompt to log table
     logJSON = quill.scribe("/DavinCC/data/log.json", "r")
     log = textutils.unserialiseJSON(logJSON)
     local pos = #log + 1
@@ -94,11 +94,18 @@ function completion.chat(prompt, risk, tokens, cutoff)
     log[pos]["role"] = "user"
     log[pos]["content"] = prompt
 
-    -- Append to log and send request
+    -- Serialise and send request
+    logJSON = textutils.serialiseJSON(log)
+    local reply = completion.request(logJSON, risk, tokens, "chat")
+
+    -- Add response and rewrite to log 
+    pos = pos + 1
+    log[pos] = {}
+    log[pos]["role"] = "assistant"
+    log[pos]["content"] = reply
     logJSON = textutils.serialiseJSON(log)
     quill.scribe("/DavinCC/data/log.json", "w", logJSON)
-    local chat = completion.request(logJSON, risk, tokens, "chat")
-    return chat
+    return reply
 end
 
 
