@@ -21,6 +21,8 @@ function completion.request(prompt, temp, tokens, model) -- TODO: add config cla
     local modelName
     if model == "chat" then
         modelName = "gpt-3.5-turbo"
+    elseif model == "davinci" then
+        modelName = "text-davinci-003"
     else
         modelName = model
     end
@@ -95,6 +97,11 @@ function completion.chat(prompt, risk, tokens, cutoff)
     -- Read log text and add prompt to log table
     logJSON = quill.scribe("/DavinCC/data/log.txt", "r")
     log = textutils.unserialiseJSON(logJSON)
+
+    for key, value in pairs(log) do
+        
+    end
+
     local pos = #log + 1
     log[pos] = {}
     log[pos]["role"] = "user"
@@ -132,11 +139,13 @@ function completion.last(model)
 
     -- Returning only text output
     local cmplLast = textutils.unserialiseJSON(cmplData)
-    if model == "chat" then
-        return cmplLast["choices"][1]["message"]["content"]
-    else
-        return cmplLast["choices"][1]["text"]
-    end
+    return cmplLast
+
+    -- if model == "chat" then
+    --     return cmplLast["choices"][1]["message"]["content"]
+    -- else
+    --     return cmplLast["choices"][1]["text"]
+    -- end
 end
 
 
@@ -170,7 +179,8 @@ end
 
 
 -- Re-greet AI and replay conversation
-function completion.regreet(greetFile, risk, tokens, cutoff)    --! Add support for gpt-3.5-turbo
+function completion.regreet(greetFile, risk, tokens, cutoff, model) --! Add support for gpt-3.5-turbo
+    model = model or "davinci"
     local log = quill.scribe("/DavinCC/data/log.txt", "r")
     local prompt
     local replay
@@ -201,7 +211,7 @@ function completion.regreet(greetFile, risk, tokens, cutoff)    --! Add support 
 
     -- Replay each prompt
     for _, value in pairs(tblReplays) do
-        completion.continue(value, risk, tokens, cutoff)
+        completion.continue(value, risk, tokens, cutoff, model)
     end
 
     return idxStart
@@ -209,7 +219,8 @@ end
 
 
 -- Continue with conversation
-function completion.continue(prompt, temp, tokens, cutoff)
+function completion.continue(prompt, temp, tokens, cutoff, model)
+    model = model or "davinci"
     local promptLower = string.lower(prompt)
 
     -- Append prompt to log
@@ -240,7 +251,7 @@ function completion.continue(prompt, temp, tokens, cutoff)
     -- Truncate prompt and generate reply
     prompt = quill.truncate(prompt)
     local idxPrompt = string.len(prompt)
-    completion.request(prompt, temp, tokens)
+    completion.request(prompt, temp, tokens, model)
 
     if openai.isFlagged then
         local logFlagged = quill.scribe("/DavinCC/data/log.txt", "r")
@@ -248,7 +259,7 @@ function completion.continue(prompt, temp, tokens, cutoff)
         quill.scribe("/DavinCC/data/log.txt", "w", logSafe)
     end
 
-    local contReply = completion.last()
+    local contReply = completion.last(model)
     local contText = contReply["choices"][1]["text"]
 
     -- Cut history if present and append fully-truncated reply to log
@@ -269,7 +280,7 @@ end
 
 
 -- Continue with self
-function completion.continueSelf(prompt, temp, tokens, cutoff)
+function completion.continueSelf(prompt, temp, tokens, cutoff, model)
     local promptLower = string.lower(prompt)
 
     -- Append prompt to log
@@ -299,7 +310,7 @@ function completion.continueSelf(prompt, temp, tokens, cutoff)
     -- Truncate prompt and generate reply
     prompt = quill.truncate(prompt)
     local idxPrompt = string.len(prompt)
-    completion.request(prompt, temp, tokens)
+    completion.request(prompt, temp, tokens, model)
     local contReply = completion.last()
     local contText = contReply
 

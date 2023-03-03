@@ -254,7 +254,7 @@ local function promptSelf()
 
     if ans == "y" then
         -- Continue conversation with self
-        cont = completion.continueSelf(reply, risk, tokens, cutoff)
+        cont = completion.continueSelf(reply, risk, tokens, cutoff, model)
 
         -- Store and print truncated prompt
         prompt = cont
@@ -319,7 +319,7 @@ elseif model ~= "chat" then
 
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
-    cont = completion.continue("hello", risk, tokens, cutoff)
+    cont = completion.continue("hello", risk, tokens, cutoff, model)
     reply = cont
     print(reply)
 
@@ -342,7 +342,7 @@ elseif model ~= "chat" then
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            cont = completion.continue(prompt, risk, tokens, cutoff)
+            cont = completion.continue(prompt, risk, tokens, cutoff, model)
 
             -- Store truncated reply
             reply = cont
