@@ -16,7 +16,8 @@ local positionsSelf = {}
 
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens, model) -- TODO: add config class as argument
-    -- Check model
+    -- Check model, defaulting to ChatGPT's gpt-3.5-turbo
+    model = model or "chat"
     local modelName
     if model == "chat" then
         modelName = "gpt-3.5-turbo"
@@ -38,8 +39,13 @@ function completion.request(prompt, temp, tokens, model) -- TODO: add config cla
                 end
             end
         end
+
         -- Fill with dummy JSON when empty
-        cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
+        if model == "chat" then
+            cmplJSON = quill.scribe("/DavinCC/data/emptyChat.json", "r")
+        else
+            cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
+        end
     end
     
     -- Unserialise into lua object/table
@@ -86,8 +92,8 @@ function completion.chat(prompt, risk, tokens, cutoff)
     local logJSON
     local log
 
-    -- Read and add prompt to log table
-    logJSON = quill.scribe("/DavinCC/data/log.json", "r")
+    -- Read log text and add prompt to log table
+    logJSON = quill.scribe("/DavinCC/data/log.txt", "r")
     log = textutils.unserialiseJSON(logJSON)
     local pos = #log + 1
     log[pos] = {}
@@ -105,6 +111,7 @@ function completion.chat(prompt, risk, tokens, cutoff)
     log[pos]["content"] = reply
     logJSON = textutils.serialiseJSON(log)
     quill.scribe("/DavinCC/data/log.json", "w", logJSON)
+    quill.scribe("/DavinCC/data/log.txt", "w", logJSON)
 
     -- Clear logs and terminate program if prompted with goodbye/bye keywords
     if prompt == "goodbye" or prompt == "bye" then
@@ -116,12 +123,20 @@ end
 
 
 -- Retrieve the last Davinci response
-function completion.last()
+function completion.last(model)
+    -- Default to ChatGPT
+    model = model or "chat"
+
     -- Accessing local storage
     local cmplData = quill.scribe("/DavinCC/data/cmpl.json", "r")
 
-    -- Return as lua object/table
-    return textutils.unserialiseJSON(cmplData)
+    -- Returning only text output
+    local cmplLast = textutils.unserialiseJSON(cmplData)
+    if model == "chat" then
+        return cmplLast["choices"][1]["message"]["content"]
+    else
+        return cmplLast["choices"][1]["text"]
+    end
 end
 
 

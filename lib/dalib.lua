@@ -7,23 +7,26 @@ local quill = require("lib/quill")
 local sketch = require("lib/sketch")
 local flag = require("lib/flag")
 
-local personality, risk, cutoff, img, magnitude
-local tokens = 200
+local personality, risk, cutoff, model, img, magnitude
+local tokens = 500
+local isInput = true
 local isPrompt = true
 local isImg
 local size
 local number
 
 -- Library input for risk and personality
-function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
+function dalib.setup(setPersonality, setRisk, setCutoff, setModel, setImg, setMagnitude)
     personality = setPersonality
     risk = setRisk
     cutoff = setCutoff
+    model = setModel
     img = setImg
     magnitude = setMagnitude
 
     personality = personality or "standard"
     personality = string.lower(personality)
+    model = model or "chat"
 
     -- Input conversion
     if risk then
@@ -47,9 +50,9 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
     size = "256x256"
     if magnitude == "sm" then
         size = "256x256"
-    elseif magnitude == "md" or magnitude == "lg" then  -- Medium AND large
+    elseif magnitude == "md" or magnitude == "lg" then -- Medium AND large
         size = "512x512"
-    elseif magnitude == "lg" then   --! Large images not rendering, thus temporarily disabled
+    elseif magnitude == "lg" then --! Large images not rendering, thus temporarily disabled
         size = "1024x1024"
     end
 
@@ -58,7 +61,7 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
         risk = 0
     end
     if type(cutoff) ~= "number" then
-        cutoff = 5
+        cutoff = 10
     end
 
     -- Input testing for out of range
@@ -85,30 +88,49 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setImg, setMagnitude)
     if personality ~= "none" then
         -- Select greeting file based on personality
         local greetPersonality = quill.firstUpper(personality)
-        local greetFile = "/DavinCC/greetings/greet" .. greetPersonality .. ".txt"
-    
+        local greetFile
+
+        -- Test for ChatGPT model
+        if model == "chat" then
+            greetFile = "/DavinCC/greetings/greet" .. greetPersonality .. ".json"
+        else
+            greetFile = "/DavinCC/greetings/greet" .. greetPersonality .. ".txt"
+        end
+
         -- Initiate a conversation
-        completion.greet(greetFile)
-        quill.scribe(greetFile, "r")
+        completion.greet(greetFile, false, true)
     end
 
     --! No startup print
-    local cont = completion.continue("hello", risk, tokens, cutoff)
+    local cont
+    if model == "chat" then
+        cont = completion.chat("hello", risk, tokens, cutoff)
+    else
+        cont = completion.continue("hello", risk, tokens, cutoff)
+    end
     dalib.reply = cont
 
     -- Return UX-ready concat of all basic variables
     return "Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img
 end
 
+-- Conversation variables
+local prompt
+local cont
+local reply
+local number
+
 
 -- Configure based on new prompt
 local function config(prompt)
+    --! TODO: Literalise prompt commands
     local confPmpt = "[PMPT]"
     local confPer = "[PER]"
     local confIns = "[INS]"
-    local confClr = "[CLR]"
     local confImg = "[IMG]"
+    local confSelf = "[SELF]"
     local confVar = "[VAR]"
+    local confClr = "[CLR]"
 
     isPrompt = true
 
@@ -195,9 +217,24 @@ local function config(prompt)
     end
 
 
+    --* Process self flags and check for [SELF]
+    local tblSelf = flag.self(prompt, risk, tokens, cutoff)
+    if flag.isCall then
+        -- Check output
+        if tblSelf then
+            personality = tblSelf["g"] or personality
+            isInput = false
+        end
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confSelf .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    end
+
+
     --* Process variable flags and check for [VAR]
     local tblVar = flag.var(prompt)
-    if flag.isCall then
+    if flag.isCall and isInput then
         if tblVar then
             -- Stop prompting
             isPrompt = false
@@ -211,12 +248,10 @@ local function config(prompt)
         -- Re-enable prompting
         isPrompt = true
     end
-    
-    
+
+
     --* Check for [CLR]
     if quill.seek(prompt, confClr, "%s") then
-        isPrompt = false
-
         -- Clear terminal and reset pos
         term.clear()
         term.setCursorPos(1, 1)
@@ -227,11 +262,40 @@ local function config(prompt)
     end
 
 
-    -- TODO: other configs... [INS]-ffile, [PMPT]-rrisk-ccutoff-ttokens, [PER]-ggreet-rreplay, [SELF]-ggreet, [LIST]-llines
+    -- TODO: other configs... [SELF]-ggreet, [LIST]-llines
 
     -- Return new trail-less prompt
-    prompt = quill.trailSpace(prompt)
+    -- prompt = quill.trailSpace(prompt)
     return prompt
+end
+
+
+local function promptSelf()
+    -- Allow cancellation
+    print("Continue? (y/n)")
+    sleep(1)
+    local _, ans = os.pullEvent("char")
+
+    local x, y = term.getCursorPos()
+    term.setCursorPos(x, y - 1)
+    term.clearLine()
+
+    if ans == "y" then
+        -- Continue conversation with self
+        cont = completion.continueSelf(reply, risk, tokens, cutoff)
+
+        -- Store and print truncated prompt
+        prompt = cont
+        prompt = quill.truncate(prompt)
+        quill.scribe("/DavinCC/data/out.txt", "w", prompt)
+        print(prompt)
+        sleep(1)
+        isInput = false
+
+    elseif ans == "n" then
+        isInput = true
+        prompt = read()
+    end
 end
 
 
@@ -248,7 +312,7 @@ function dalib.run(prompt)
         prompt = config(prompt)
 
         -- Complete prompt (user input), risk (0-1), token limit
-        cont = completion.request(prompt, risk, tokens)
+        cont = completion.request(prompt, risk, tokens, model)
 
         -- Store truncated reply
         reply = cont
@@ -272,9 +336,19 @@ function dalib.run(prompt)
         -- Configuring based on prompt commands
         prompt = config(prompt)
 
+        -- Check for self conversation
+        if not isInput then
+            promptSelf()
+            print("\n")
+        end
+
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            cont = completion.continue(prompt, risk, tokens, cutoff)
+            if model == "chat" then
+                cont = completion.chat(prompt, risk, tokens, cutoff)
+            else
+                cont = completion.continue(prompt, risk, tokens, cutoff)
+            end
 
             -- Store truncated reply
             reply = cont

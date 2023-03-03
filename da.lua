@@ -16,7 +16,7 @@ local flag = require("lib/flag")
 
 -- User input for risk and personality
 local personality, risk, cutoff, model, img, magnitude = ...
-local tokens = 200
+local tokens = 500
 local isInput = true
 local isPrompt = true
 local isImg
@@ -57,7 +57,7 @@ if type(risk) ~= "number" then
     risk = 0
 end
 if type(cutoff) ~= "number" then
-    cutoff = 5
+    cutoff = 10
 end
 
 -- Input testing for out of range
@@ -333,6 +333,8 @@ elseif model ~= "chat" then
         end
         -- Configuring based on prompt commands
         prompt = config(prompt)
+
+        -- Check for self conversation
         if not isInput then
             promptSelf()
             print("\n")
