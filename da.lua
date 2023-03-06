@@ -400,8 +400,7 @@ elseif model == "chat" then
             cont = completion.chat(prompt, risk, tokens, cutoff)
 
             -- Store truncated reply
-            reply = cont
-            reply = quill.truncate(reply)
+            reply = quill.truncate(cont)
             quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
             -- Print output as orange
