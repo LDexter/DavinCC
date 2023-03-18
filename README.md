@@ -146,7 +146,13 @@ The above example requires [DALL-CC](https://github.com/LDexter/DALL-CC) to be i
 
 All prompt commands, with their placeholder arguments:
 
-`[PMPT]-rrisk-ccutoff-ttokens`, `[PER]-ggreet-rreplay`, `[INS]-ffile`, `[IMG]-nnumber-ssize`, `[SELF]-ggreet`, `[VAR]-nname-vvalue`, `[CLR]`
+`[PMPT]-rrisk-ccutoff-ttokens`,
+
+`[PER]-ggreet-rreplay`, `[INS]-uurl-ffile`,
+
+`[IMG]-nnumber-ssize`, `[SELF]-ggreet`,
+
+`[VAR]-nname-vvalue`, `[CLR]`
 
 Explained:
 
@@ -157,7 +163,8 @@ Explained:
 - `[PER]`, to switch personalities on-demand
   - Greet arg: `-gstandard`, for the new personality (must already exist in /DavinCC/greetings/ folder)
   - Replay arg: `-rtrue`, to gain personality-accurate context by parsing all prompts within cutoff scope
-- `[INS]`, to insert text from a file in `/DavinCC/data/`, at the exact location of the command
+- `[INS]`, to insert text from a URL from the internet or file in `/DavinCC/data/`, at the exact location of the command (choose either URL or file)
+  - URL arg: `-uhttps://...`, to have the entire site scraped for data to provide the AI
   - File arg: `-fitem.txt`, when speciying a file other than the default `in.txt`
 - `[IMG]`, to generate an image with [DALL-CC](https://github.com/LDexter/DALL-CC) using DavinCC's reply
   - Number arg: `-n1`, to specify the number of gens on the same reply (1-10)

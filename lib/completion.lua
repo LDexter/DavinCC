@@ -102,7 +102,7 @@ function completion.chat(prompt, risk, tokens, cutoff, model)
     log = textutils.unserialiseJSON(logJSON)
 
     for key, value in pairs(log) do
-        
+        -- TODO:
     end
 
     local pos = #log + 1

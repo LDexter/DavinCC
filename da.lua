@@ -156,7 +156,21 @@ local function config(prompt)
 
         -- Check output
         if tblIns then
-            if tblIns["f"] then
+            if tblIns["u"] then
+                -- Prioritising url, with full webscrape
+                print(tblIns["u"])
+                local request = http.get(tblIns["u"])
+                local response = request.readAll()
+                request.close()
+
+                local text = ""
+                for match in response:gmatch(">%s*(.-)%s*<") do text = text .. match end
+                print(text)
+                quill.truncate(text)
+
+                -- Inserting scrape at command location
+                prompt = quill.insert(prompt, text, flag.isCall)
+            elseif tblIns["f"] then
                 -- Appending file name to path
                 local insFile = "/DavinCC/data/" .. tblIns["f"]
 
@@ -165,7 +179,7 @@ local function config(prompt)
                     insFile = insFile .. ".txt"
                 end
 
-                -- Reading and inserting file contents
+                -- Reading and inserting file contents at command location
                 local insertion = quill.scribe(insFile, "r")
                 prompt = quill.insert(prompt, insertion, flag.isCall)
             end

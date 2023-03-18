@@ -177,11 +177,15 @@ function flag.ins(prompt)
         -- Check for arguments
         if string.find(flag.call, "-") then
             tblArgs = flag.separate(flag.call)
-            -- Convert file ("f") argument
+            -- No need to convert file ("f") argument
+            tblOut["f"] = tblArgs["f"]
+            -- No need to convert url ("u") argument
+            tblOut["u"] = tblArgs["u"]
+        else
+            -- Defaulting to inserting in.txt
+            tblOut["f"] = "in"
         end
 
-        -- Always insert, defaulting to in.txt
-        tblOut["f"] = tblArgs["f"] or "in"
     end
     -- Return arguments
     return tblOut
