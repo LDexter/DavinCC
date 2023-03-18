@@ -22,7 +22,15 @@ local isPrompt = true
 local isImg
 personality = personality or "standard"
 personality = string.lower(personality)
-model = model or "chat"
+model = model or "gpt-3.5"
+
+local isChat = false
+if model == "gpt-3.5" then
+    model = "gpt-3.5-turbo"
+end
+if model == "gpt-3.5" or model == "gpt-3.5-turbo" or model == "gpt-4" or model == "gpt-4-32k" then
+    isChat = true
+end
 
 -- Input conversion
 if risk then
@@ -305,7 +313,7 @@ if personality == "none" then
 
 
 -- Otherwise, conduct conversation with chosen personality
-elseif model ~= "chat" then
+elseif not isChat then
     -- Printing chosen arguments
     print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img)
 
@@ -362,7 +370,7 @@ elseif model ~= "chat" then
         end
     end
     
-elseif model == "chat" then
+elseif isChat then
     -- Printing chosen arguments
     print("Personality: \"" .. personality .. "\" Risk: " .. risk .. " Cutoff: " .. cutoff .. " Img: " .. img)
 
@@ -376,7 +384,7 @@ elseif model == "chat" then
 
     -- Start with reply to "hello" prompt
     term.setTextColour(colours.orange)
-    cont = completion.chat("hello", risk, tokens, cutoff)
+    cont = completion.chat("hello", risk, tokens, cutoff, model)
     reply = cont
     print(reply)
 
@@ -397,7 +405,7 @@ elseif model == "chat" then
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            cont = completion.chat(prompt, risk, tokens, cutoff)
+            cont = completion.chat(prompt, risk, tokens, cutoff, model)
 
             -- Store truncated reply
             reply = quill.truncate(cont)

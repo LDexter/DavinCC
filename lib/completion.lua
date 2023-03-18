@@ -17,16 +17,19 @@ local positionsSelf = {}
 -- Request text from Davinci, given provided prompt, temperature, and maximum tokens
 function completion.request(prompt, temp, tokens, model) -- TODO: add config class as argument
     -- Check model, defaulting to ChatGPT's gpt-3.5-turbo
-    model = model or "chat"
-    local modelName
-    if model == "chat" then
-        modelName = "gpt-3.5-turbo"
+    model = model or "gpt-3.5-turbo"
+    if model == "gpt-3.5" then
+        model = "gpt-3.5-turbo"
     elseif model == "davinci" then
-        modelName = "text-davinci-003"
-    else
-        modelName = model
+        model = "text-davinci-003"
     end
-    local cmplJSON = openai.complete(modelName, prompt, temp, tokens)
+
+    local isChat = false
+    if model == "gpt-3.5" or model == "gpt-3.5-turbo" or model == "gpt-4" or model == "gpt-4-32k" then
+        isChat = true
+    end
+
+    local cmplJSON = openai.complete(model, prompt, temp, tokens)
 
     -- Check for empty response
     if not cmplJSON then
@@ -43,7 +46,7 @@ function completion.request(prompt, temp, tokens, model) -- TODO: add config cla
         end
 
         -- Fill with dummy JSON when empty
-        if model == "chat" then
+        if isChat then
             cmplJSON = quill.scribe("/DavinCC/data/emptyChat.json", "r")
         else
             cmplJSON = quill.scribe("/DavinCC/data/empty.json", "r")
@@ -52,7 +55,7 @@ function completion.request(prompt, temp, tokens, model) -- TODO: add config cla
     
     -- Unserialise into lua object/table
     local cmplOut = textutils.unserialiseJSON(cmplJSON)
-    if model ~= "chat" then
+    if not isChat then
     -- Test choices for contextless summaries
         for _, choice in pairs(cmplOut["choices"]) do
             -- Find opening space to indicate lack of context
@@ -81,7 +84,7 @@ function completion.request(prompt, temp, tokens, model) -- TODO: add config cla
     quill.scribe("/DavinCC/data/cmpl.json", "w", cmplJSON)
 
     -- Returning only text output
-    if model == "chat" then
+    if isChat then
         return cmplOut["choices"][1]["message"]["content"]
     else
         return cmplOut["choices"][1]["text"]
@@ -90,7 +93,7 @@ end
 
 
 -- Process chat-specific functions
-function completion.chat(prompt, risk, tokens, cutoff)
+function completion.chat(prompt, risk, tokens, cutoff, model)
     local logJSON
     local log
 
@@ -109,7 +112,7 @@ function completion.chat(prompt, risk, tokens, cutoff)
 
     -- Serialise and send request
     logJSON = textutils.serialiseJSON(log)
-    local reply = completion.request(logJSON, risk, tokens, "chat")
+    local reply = completion.request(logJSON, risk, tokens, model)
 
     -- Add response and rewrite to log 
     pos = pos + 1
@@ -130,9 +133,7 @@ end
 
 
 -- Retrieve the last Davinci response
-function completion.last(model)
-    -- Default to ChatGPT
-    model = model or "chat"
+function completion.last()
 
     -- Accessing local storage
     local cmplData = quill.scribe("/DavinCC/data/cmpl.json", "r")
@@ -140,12 +141,6 @@ function completion.last(model)
     -- Returning only text output
     local cmplLast = textutils.unserialiseJSON(cmplData)
     return cmplLast
-
-    -- if model == "chat" then
-    --     return cmplLast["choices"][1]["message"]["content"]
-    -- else
-    --     return cmplLast["choices"][1]["text"]
-    -- end
 end
 
 
@@ -259,7 +254,7 @@ function completion.continue(prompt, temp, tokens, cutoff, model)
         quill.scribe("/DavinCC/data/log.txt", "w", logSafe)
     end
 
-    local contReply = completion.last(model)
+    local contReply = completion.last()
     local contText = contReply["choices"][1]["text"]
 
     -- Cut history if present and append fully-truncated reply to log
