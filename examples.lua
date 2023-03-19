@@ -18,12 +18,18 @@ local personality = "standard"
 local risk = 1
 local tokens = 500
 local cutoff = 10
-local model = "chat"
+local model = "gpt-3.5-turbo"
+
+-- Checking usage of chat method
+local isChat = false
+if model == "gpt-3.5" or model == "gpt-3.5-turbo" or model == "gpt-4" or model == "gpt-4-32k" then
+    isChat = true
+end
 
 -- Select greeting file based on personality
 personality = quill.firstUpper(personality)
 local greetFile
-if model == "chat" then
+if isChat then
     greetFile = "/DavinCC/greetings/greet" .. personality .. ".json"
 else
     greetFile = "/DavinCC/greetings/greet" .. personality .. ".txt"
@@ -73,7 +79,7 @@ sleep(1)
 
 -- Initiate a new "DIY" conversation, as barebones and lightweight version of da
 completion.greet(greetFile, false, true)
-local start = completion.chat("hello", risk, tokens, cutoff)
+local start = completion.chat("hello", risk, tokens, cutoff, model)
 print(start .. "\n")
 
 
@@ -84,6 +90,6 @@ while true do
     print("\n")
     prompt = read()
     -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-    cont = completion.chat(prompt, risk, tokens, cutoff)
+    cont = completion.chat(prompt, risk, tokens, cutoff, model)
     print(cont)
 end

@@ -11,6 +11,7 @@ local personality, risk, cutoff, model, img, magnitude
 local tokens = 500
 local isInput = true
 local isPrompt = true
+local isChat = false
 local isImg
 local size
 local number
@@ -26,7 +27,15 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setModel, setImg, setMa
 
     personality = personality or "standard"
     personality = string.lower(personality)
-    model = model or "chat"
+    model = model or "gpt-3.5"
+
+    -- Checking usage of chat method
+    if model == "gpt-3.5" then
+        model = "gpt-3.5-turbo"
+    end
+    if model == "gpt-3.5" or model == "gpt-3.5-turbo" or model == "gpt-4" or model == "gpt-4-32k" then
+        isChat = true
+    end
 
     -- Input conversion
     if risk then
@@ -91,7 +100,7 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setModel, setImg, setMa
         local greetFile
 
         -- Test for ChatGPT model
-        if model == "chat" then
+        if isChat then
             greetFile = "/DavinCC/greetings/greet" .. greetPersonality .. ".json"
         else
             greetFile = "/DavinCC/greetings/greet" .. greetPersonality .. ".txt"
@@ -103,7 +112,7 @@ function dalib.setup(setPersonality, setRisk, setCutoff, setModel, setImg, setMa
 
     --! No startup print
     local cont
-    if model == "chat" then
+    if isChat then
         cont = completion.chat("hello", risk, tokens, cutoff)
     else
         cont = completion.continue("hello", risk, tokens, cutoff)
@@ -176,7 +185,22 @@ local function config(prompt)
 
         -- Check output
         if tblIns then
-            if tblIns["f"] then
+            if tblIns["u"] then
+                -- Prioritising url, with full webscrape
+                print(tblIns["u"])
+                local request = http.get(tblIns["u"])
+                local response = request.readAll()
+                request.close()
+
+                -- Finding matches for text within HTML
+                local text = ""
+                for match in response:gmatch(">%s*(.-)%s*<") do text = text .. match end
+                print(text)
+                quill.truncate(text)
+
+                -- Inserting scrape at command location
+                prompt = quill.insert(prompt, text, flag.isCall)
+            elseif tblIns["f"] then
                 -- Appending file name to path
                 local insFile = "/DavinCC/data/" .. tblIns["f"]
 
@@ -185,7 +209,7 @@ local function config(prompt)
                     insFile = insFile .. ".txt"
                 end
 
-                -- Reading and inserting file contents
+                -- Reading and inserting file contents at command location
                 local insertion = quill.scribe(insFile, "r")
                 prompt = quill.insert(prompt, insertion, flag.isCall)
             end
@@ -282,7 +306,7 @@ local function promptSelf()
 
     if ans == "y" then
         -- Continue conversation with self
-        cont = completion.continueSelf(reply, risk, tokens, cutoff)
+        cont = completion.continueSelf(reply, risk, tokens, cutoff, model)
 
         -- Store and print truncated prompt
         prompt = cont
@@ -344,10 +368,10 @@ function dalib.run(prompt)
 
         if isPrompt then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
-            if model == "chat" then
-                cont = completion.chat(prompt, risk, tokens, cutoff)
+            if isChat then
+                cont = completion.chat(prompt, risk, tokens, cutoff, model)
             else
-                cont = completion.continue(prompt, risk, tokens, cutoff)
+                cont = completion.continue(prompt, risk, tokens, cutoff, model)
             end
 
             -- Store truncated reply

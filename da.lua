@@ -24,6 +24,7 @@ personality = personality or "standard"
 personality = string.lower(personality)
 model = model or "gpt-3.5"
 
+-- Checking usage of chat method
 local isChat = false
 if model == "gpt-3.5" then
     model = "gpt-3.5-turbo"
@@ -163,6 +164,7 @@ local function config(prompt)
                 local response = request.readAll()
                 request.close()
 
+                -- Finding matches for text within HTML
                 local text = ""
                 for match in response:gmatch(">%s*(.-)%s*<") do text = text .. match end
                 print(text)
