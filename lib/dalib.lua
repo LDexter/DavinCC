@@ -187,7 +187,6 @@ local function config(prompt)
         if tblIns then
             if tblIns["u"] then
                 -- Prioritising url, with full webscrape
-                print(tblIns["u"])
                 local request = http.get(tblIns["u"])
                 local response = request.readAll()
                 request.close()
@@ -195,8 +194,7 @@ local function config(prompt)
                 -- Finding matches for text within HTML
                 local text = ""
                 for match in response:gmatch(">%s*(.-)%s*<") do text = text .. match end
-                print(text)
-                quill.truncate(text)
+                text = quill.truncate(text)
 
                 -- Inserting scrape at command location
                 prompt = quill.insert(prompt, text, flag.isCall)
@@ -309,10 +307,9 @@ local function promptSelf()
         cont = completion.continueSelf(reply, risk, tokens, cutoff, model)
 
         -- Store and print truncated prompt
-        prompt = cont
-        prompt = quill.truncate(prompt)
+        print(cont)
+        prompt = quill.truncate(cont)
         quill.scribe("/DavinCC/data/out.txt", "w", prompt)
-        print(prompt)
         sleep(1)
         isInput = false
 
@@ -339,8 +336,7 @@ function dalib.run(prompt)
         cont = completion.request(prompt, risk, tokens, model)
 
         -- Store truncated reply
-        reply = cont
-        reply = quill.truncate(reply)
+        reply = quill.truncate(cont)
         quill.scribe("/DavinCC/out.txt", "w", reply)
 
         --! No reply print

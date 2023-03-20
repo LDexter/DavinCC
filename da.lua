@@ -159,7 +159,6 @@ local function config(prompt)
         if tblIns then
             if tblIns["u"] then
                 -- Prioritising url, with full webscrape
-                print(tblIns["u"])
                 local request = http.get(tblIns["u"])
                 local response = request.readAll()
                 request.close()
@@ -167,8 +166,7 @@ local function config(prompt)
                 -- Finding matches for text within HTML
                 local text = ""
                 for match in response:gmatch(">%s*(.-)%s*<") do text = text .. match end
-                print(text)
-                quill.truncate(text)
+                text = quill.truncate(text)
 
                 -- Inserting scrape at command location
                 prompt = quill.insert(prompt, text, flag.isCall)
@@ -281,10 +279,9 @@ local function promptSelf()
         cont = completion.continueSelf(reply, risk, tokens, cutoff, model)
 
         -- Store and print truncated prompt
-        prompt = cont
-        prompt = quill.truncate(prompt)
+        print(cont)
+        prompt = quill.truncate(cont)
         quill.scribe("/DavinCC/data/out.txt", "w", prompt)
-        print(prompt)
         sleep(1)
         isInput = false
 
@@ -311,14 +308,13 @@ if personality == "none" then
     -- Complete prompt (user input), risk (0-1), token limit
     cont = completion.request(prompt, risk, tokens)
 
-    -- Store truncated reply
-    reply = cont
-    reply = quill.truncate(reply)
-    quill.scribe("/DavinCC/out.txt", "w", reply)
-
     -- Print output as orange
     term.setTextColour(colours.orange)
-    print(reply .. "\n")
+    print(cont .. "\n")
+
+    -- Store truncated reply
+    reply = quill.truncate(cont)
+    quill.scribe("/DavinCC/out.txt", "w", reply)
 
     -- Generating image if true
     if isImg then
@@ -368,14 +364,13 @@ elseif not isChat then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
             cont = completion.continue(prompt, risk, tokens, cutoff, model)
 
-            -- Store truncated reply
-            reply = cont
-            reply = quill.truncate(reply)
-            quill.scribe("/DavinCC/data/out.txt", "w", reply)
-
             -- Print output as orange
             term.setTextColour(colours.orange)
-            print(reply)
+            print(cont)
+
+            -- Store truncated reply
+            reply = quill.truncate(cont)
+            quill.scribe("/DavinCC/data/out.txt", "w", reply)
 
             -- Generating image if true
             if isImg then
@@ -423,13 +418,13 @@ elseif isChat then
             -- Continue with prompt (user input), risk (0-1), token limit (max per reply), cutoff (how many replies to remember)
             cont = completion.chat(prompt, risk, tokens, cutoff, model)
 
+            -- Print output as orange
+            term.setTextColour(colours.orange)
+            print(cont)
+
             -- Store truncated reply
             reply = quill.truncate(cont)
             quill.scribe("/DavinCC/data/out.txt", "w", reply)
-
-            -- Print output as orange
-            term.setTextColour(colours.orange)
-            print(reply)
 
             -- Generating image if true
             if isImg then
