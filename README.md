@@ -72,10 +72,10 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
 
 ---
 
-- [x] Automated code read, write, and execution <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/code.svg">
+- [x] Automated code reading, writing, and execution <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/code.svg">
 
-  - Analyse your code for commenting, improving, fixing, refactoring, etc through [INS] prompt command
-  - Write new code that does anything you can imagine with [CODE] command
+  - Analyse your code for commenting, improving, fixing, refactoring, etc through `[INS]` prompt command
+  - Write new code that does anything you can imagine with `[CODE]` command
 
 ---
 
