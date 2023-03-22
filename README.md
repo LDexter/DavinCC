@@ -56,23 +56,33 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
 
 - [x] Powerful prompt commands at the ready <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/terminal.svg">
   - Call commands left and right, anywhere within a prompt
-  - **Future feature:** stack multiple calls like a true command slinger!
   - Mix it up with near unix-like flag arguments
+  - Chain multiple calls and args together like a true command slinger!
   - Quick and simple syntax, that wont ruin your prompts
 
 ---
 
 - [x] Conversational image generation <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/image.svg">
-  - Automatic piping of generated text into DALL-CC for effortless image prompting
+
+  - Automatic piping of generated text into [DALL-CC](https://github.com/LDexter/DALL-CC) for effortless image prompting
   - The perfect combination of one word in, extreme detail out, to prompt an image
   - If you are at a complete loss for any ideas, just ask DavinCC to imagine its own!
   - Thanks to seamless integration, images are influenced by all the above features!
+  - Performed through the [IMG] prompt command (as described further down)
 
 ---
 
-- [x] Freedom to train on your own data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
+- [x] Automated code read, write, and execution <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/code.svg">
 
-  - Notice knowledge gaps? Train them into Davinci: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
+  - Analyse your code for commenting, improving, fixing, refactoring, etc through [INS] prompt command
+  - Write new code that does anything you can imagine with [CODE] command
+
+---
+
+- [x] Freedom to learn on new data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
+
+  - Insert website contents with [INS] command for internet access, just like Bing Chat!
+  - Train Davinci and other models with massive datasets: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
 
 ---
 
