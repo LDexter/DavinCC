@@ -68,7 +68,7 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
   - The perfect combination of one word in, extreme detail out, to prompt an image
   - If you are at a complete loss for any ideas, just ask DavinCC to imagine its own!
   - Thanks to seamless integration, images are influenced by all the above features!
-  - Performed through the [IMG] prompt command (as described further down)
+  - Performed through the `[IMG]` prompt command (as described further down)
 
 ---
 
@@ -81,7 +81,7 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
 
 - [x] Freedom to learn on new data <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/graduation-cap.svg">
 
-  - Insert website contents with [INS] command for internet access, just like Bing Chat!
+  - Insert website contents with `[INS]` command for internet access, just like Bing Chat!
   - Train Davinci and other models with massive datasets: [OpenAI fine-tuning](https://beta.openai.com/docs/guides/fine-tuning)
 
 ---
