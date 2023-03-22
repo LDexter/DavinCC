@@ -356,6 +356,14 @@ if personality == "none" then
         if ans then sketch.display(links) end
     end
 
+    -- Generating code if true
+    if isCode then
+        quill.code(cont, "/DavinCC/data/programs/", "gpt")
+        print("I made a program... Run? (y/n)\n")
+        local ans = closedAsk()
+        if ans then os.run({}, "/DavinCC/data/programs/gpt.lua") end
+    end
+
 
 -- Otherwise, conduct conversation with chosen personality
 elseif not isChat then
@@ -411,6 +419,14 @@ elseif not isChat then
                 print("I made an image... Display? (y/n)\n")
                 local ans = closedAsk()
                 if ans then sketch.display(links) end
+            end
+
+            -- Generating code if true
+            if isCode then
+                quill.code(cont, "/DavinCC/data/programs/", "gpt")
+                print("I made a program... Run? (y/n)\n")
+                local ans = closedAsk()
+                if ans then os.run({}, "/DavinCC/data/programs/gpt.lua") end
             end
         end
     end
@@ -470,10 +486,10 @@ elseif isChat then
 
             -- Generating code if true
             if isCode then
-                quill.code(cont, "/DavinCC/programs/", "gpt")
+                quill.code(cont, "/DavinCC/data/programs/", "gpt")
                 print("I made a program... Run? (y/n)\n")
                 local ans = closedAsk()
-                if ans then os.run({}, "/DavinCC/programs/gpt.lua") end
+                if ans then os.run({}, "/DavinCC/data/programs/gpt.lua") end
             end
         end
     end

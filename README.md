@@ -188,6 +188,7 @@ Explained:
 - `[CODE]`, for detecting the next code block produced by DavinCC to be saved and optionally executed
 
   - **Note:** currently only supports Lua files
+  - **Note:** currently forces the output path to be `/DavinCC/data/programs/gpt.lua`
 
 - `[CLR]`, to clear the terminal without prompting the AI
 
