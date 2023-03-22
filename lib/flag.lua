@@ -7,6 +7,7 @@ local pmptCall = "[PMPT]"
 local perCall = "[PER]"
 local insCall = "[INS]"
 local imgCall = "[IMG]"
+local codeCall = "[CODE]"
 local selfCall = "[SELF]"
 local varCall = "[VAR]"
 flag.isCall = nil
@@ -231,6 +232,24 @@ function flag.img(prompt)
                 tblOut["s"] = "1024x1024"
             end
         end
+    end
+    -- Return arguments
+    return tblOut
+end
+
+
+-- Processes code flag
+function flag.code(prompt)
+    -- Get and loop through arguments
+    local pattCall = quill.literalize(codeCall)
+    flag.isCall = string.find(prompt, pattCall)
+    flag.call = quill.seek(prompt, codeCall, "%s") or ""
+    local tblArgs = {}
+    local tblOut = {}
+
+    -- Check for call
+    if flag.isCall then
+        -- No arguments
     end
     -- Return arguments
     return tblOut

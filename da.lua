@@ -20,6 +20,7 @@ local tokens = 500
 local isInput = true
 local isPrompt = true
 local isImg
+local isCode
 personality = personality or "standard"
 personality = string.lower(personality)
 model = model or "gpt-3.5"
@@ -110,6 +111,7 @@ local function config(prompt)
     local confIns = "[INS]"
     local confImg = "[IMG]"
     local confSelf = "[SELF]"
+    local confCode = "[CODE]"
     local confVar = "[VAR]"
     local confClr = "[CLR]"
 
@@ -211,6 +213,22 @@ local function config(prompt)
     end
 
 
+    --* Process code flags and check for [CODE]
+    local tblCode = flag.code(prompt)
+    if flag.isCall then
+        -- No output
+        -- Prepare for code
+        isCode = true
+
+        -- Remove from prompt
+        prompt = quill.replace(prompt, confCode .. flag.call, "")
+        prompt = string.gsub(prompt, " +", " ")
+    else
+        -- Stop preparing for image
+        isCode = false
+    end
+
+
     --* Process self flags and check for [SELF]
     local tblSelf = flag.self(prompt, risk, tokens, cutoff)
     if flag.isCall then
@@ -264,17 +282,31 @@ local function config(prompt)
 end
 
 
+local function closedAsk()
+    local _, ans
+    while ans ~= "y" or ans ~= "n" do
+        sleep(1)
+        _, ans = os.pullEvent("char")
+
+        local x, y = term.getCursorPos()
+        term.setCursorPos(x, y - 1)
+        term.clearLine()
+
+        if ans == "y" then
+            return true
+        elseif ans == "n" then
+            return false
+        end
+    end
+end
+
+
 local function promptSelf()
     -- Allow cancellation
     print("Continue? (y/n)")
-    sleep(1)
-    local _, ans = os.pullEvent("char")
+    local ans = closedAsk()
 
-    local x, y = term.getCursorPos()
-    term.setCursorPos(x, y - 1)
-    term.clearLine()
-
-    if ans == "y" then
+    if ans then
         -- Continue conversation with self
         cont = completion.continueSelf(reply, risk, tokens, cutoff, model)
 
@@ -285,7 +317,7 @@ local function promptSelf()
         sleep(1)
         isInput = false
 
-    elseif ans == "n" then
+    else
         isInput = true
         prompt = read()
     end
@@ -319,8 +351,9 @@ if personality == "none" then
     -- Generating image if true
     if isImg then
         local links = sketch.generate(reply, number, size)
-        print("I made an image...\n")
-        sketch.display(links)
+        print("I made an image... Display? (y/n)\n")
+        local ans = closedAsk()
+        if ans then sketch.display(links) end
     end
 
 
@@ -375,8 +408,9 @@ elseif not isChat then
             -- Generating image if true
             if isImg then
                 local links = sketch.generate(reply, number, size)
-                print("I made an image...\n")
-                sketch.display(links)
+                print("I made an image... Display? (y/n)\n")
+                local ans = closedAsk()
+                if ans then sketch.display(links) end
             end
         end
     end
@@ -429,8 +463,17 @@ elseif isChat then
             -- Generating image if true
             if isImg then
                 local links = sketch.generate(reply, number, size)
-                print("I made an image...\n")
-                sketch.display(links)
+                print("I made an image... Display? (y/n)\n")
+                local ans = closedAsk()
+                if ans then sketch.display(links) end
+            end
+
+            -- Generating code if true
+            if isCode then
+                quill.code(cont, "/DavinCC/programs/", "gpt")
+                print("I made a program... Run? (y/n)\n")
+                local ans = closedAsk()
+                if ans then os.run({}, "/DavinCC/programs/gpt.lua") end
             end
         end
     end

@@ -152,7 +152,7 @@ All prompt commands, with their placeholder arguments:
 
 `[IMG]-nnumber-ssize`, `[SELF]-ggreet`,
 
-`[VAR]-nname-vvalue`, `[CLR]`
+`[VAR]-nname-vvalue`, `[CLR]`, `[CODE]`
 
 Explained:
 
@@ -184,6 +184,10 @@ Explained:
   - **Note:** always blocks prompt from AI processing and modifies the chat log instead
   - **Note:** must already exist in conversation as `var=1`, `item=thing`, etc
   - **Note:** awareness of variables is dependent on the cutoff scope
+
+- `[CODE]`, for detecting the next code block produced by DavinCC to be saved and optionally executed
+
+  - **Note:** currently only supports Lua files
 
 - `[CLR]`, to clear the terminal without prompting the AI
 
