@@ -21,7 +21,7 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
 - [x] Risk-taking factor <span>&nbsp;</span> <img width="25px" src="https://github.com/LDexter/fontawesome/blob/main/DavinCC/dice.svg">
 
   - ChatGPT is famously certain on every single reply, with zero risk
-  - Davinci however, has a temperature floating point (0-1) for taking risks
+  - The models however, have a temperature floating point (0-1) for taking risks
   - Risk-taking produces the most unique and interesting replies
   - Produces results such as denying its AI state, valiantly defending itself as a human and randomly deciding to reply in code (results _will_ vary)
 
@@ -100,12 +100,12 @@ Conversations require a greetName.txt/greetName.json file with a custom personal
 
 ## Setup Guide
 
-1. Download zip under "< > Code" dropdown and place extracted folder in CC **_root directory_**
-2. Follow these steps for API setup from my [openai-lua repository](https://github.com/LDexter/openai-lua#api-setup)
+1. Ensure you have Git 1.6.5 or later in your PC's terminal: `git --version`
+2. Run `git clone --recursive https://github.com/LDexter/DavinCC.git` in CC **_root directory_**
+3. Follow these steps for connecting your OpenAI account (free to use):
    1. Sign-in and access your [private API key](https://beta.openai.com/account/api-keys)
    2. Paste the API key into `template.env`, replacing the sample key
    3. Rename template.env to just .env
-3. Ensure the openai-lua library is located at `/DavinCC/lib/openai-lua`
 4. Make a "greetings" folder within DavinCC and paste `greetStandard.txt` + `greetStandard.json` inside
 5. Run `da` for a conversation interface and enjoy!
 
